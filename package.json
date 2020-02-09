@@ -1,0 +1,53 @@
+{
+  "name": "one-note-spaced-learning",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.8.3",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.40",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/jest": "^24.9.0",
+    "@types/node": "^12.12.24",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-router-dom": "^5.1.3",
+    "axios": "^0.19.1",
+    "localforage": "^1.7.3",
+    "msal": "^1.2.1",
+    "node-sass": "^4.13.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-app-polyfill": "^1.0.5",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.3.0",
+    "typescript": "^3.7.5"
+  },
+  "scripts": {
+    "start": "concurrently 'cd server && npm run start:dev' 'react-scripts start'",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.2"
+  }
+}

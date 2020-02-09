@@ -1,0 +1,13 @@
+.account-details{
+    display: flex;
+    align-items: center;
+
+    .user-name{
+        margin-right: 10px;
+    }
+
+    .logout{
+        margin-left: 10px;
+        cursor: pointer;
+    }
+}
