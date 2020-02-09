@@ -23,7 +23,7 @@ export const apiConfig = {
 };
 
 export const appTexts = {
-    appName: 'Spaced Learning'
+    appName: 'Spaced Repetition'
 };
 
 export const routeConfig = r;
