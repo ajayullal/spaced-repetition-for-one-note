@@ -25,6 +25,8 @@ const apiEndPoints = {
 
 class MicrosoftOneNoteApi {
     private _redirectUrl: string | null = null;
+    private _db: any;
+    private _dbCellDelimiter = '!@#';
 
     public get redirectUrl(): string | null {
         return this._redirectUrl;
@@ -133,14 +135,42 @@ class MicrosoftOneNoteApi {
                 {
                     'target':'body',
                     'action':'append',
-                    'content': `<p>${sessionDetails.startDate}, ${sessionDetails.startTime}, ${sessionDetails.title}, ${sessionDetails.minutesSpentLearning}, ${sessionDetails.totalSessionMinutes}, ${sessionDetails.repetition}</p>`
+                    'content': `<p>${sessionDetails.startDate}${this._dbCellDelimiter} ${sessionDetails.startTime}${this._dbCellDelimiter} ${sessionDetails.title}${this._dbCellDelimiter} ${sessionDetails.minutesSpentLearning}${this._dbCellDelimiter} ${sessionDetails.totalSessionMinutes}${this._dbCellDelimiter} ${sessionDetails.repetition}</p>`
                   }
              ]
-        ).catch(errorHandlerService.handleError);
+        ).then(data => this._db = null).catch(errorHandlerService.handleError);
+    }
+
+    getAllDBRows(){
+        return new Promise((resolve, reject) => {
+            this.getDb().then((db: string) => {
+                var doc = new DOMParser().parseFromString(db, "text/xml");
+                const ps = Array.from(doc.getElementsByTagName('p'));
+                const _rows: any[] = [];
+                ps.forEach(p => {
+                  const content = p?.textContent?.split(this._dbCellDelimiter) || [];
+                  _rows.push({
+                    startDate: content ? content[0] : '',
+                    startTime: content ? content[1] : '',
+                    title: content ? content[2].trim() : '',
+                    minutesSpentLearning: content ? Number(content[3]) : '',
+                    totalSessionMinutes: content ? content[4] : '',
+                    repetition: content ? (content[5].trim() === 'false'? 'No': 'Yes') : '',
+                  });
+                });
+                resolve(_rows);
+              }).catch(reject);
+        });
     }
 
     getDb(){
-        return axios.get(apiEndPoints.content)
+        if(this._db){
+            return Promise.resolve(this._db);
+        }else{
+            return axios.get(apiEndPoints.content).then(db => {
+                return this._db = db;
+             });
+        }
     }
 
     getPageContent(contentUrl: string) {

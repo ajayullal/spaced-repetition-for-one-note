@@ -46,29 +46,18 @@ export default (props: any) => {
       mons.getPage(pageUrl).then((_pageDetails: any) => {
         pageDetails.current = _pageDetails;
 
-        return mons.getDb().then((db: string) => {
-          var doc = new DOMParser().parseFromString(db, "text/xml");
-          const ps = Array.from(doc.getElementsByTagName('p'));
-          const _rows: any[] = [];
-          let totalMinutes = 0;
+        return mons.getAllDBRows().then((rows: any[]) => {
+          let _totalMinutes = 0;
+          const _rows: any = [];
 
-          ps.forEach(p => {
-            const content = p?.textContent?.split(',') || [];
-
-            if (pageDetails?.current.title === (content && content[2].trim())) {
-              _rows.push({
-                startDate: content ? content[0] : '',
-                startTime: content ? content[1] : '',
-                title: content ? content[2].trim() : '',
-                minutesSpentLearning: content ? content[3] : '',
-                totalSessionMinutes: content ? content[4] : '',
-                repetition: content ? (content[5].trim() === 'false'? 'No': 'Yes') : '',
-              });
-              totalMinutes += Number(content[3]);
+          rows.forEach(row => {
+            if (pageDetails?.current.title === row.title) {
+              _totalMinutes += row.minutesSpentLearning;
+              _rows.push(row);
             }
           });
 
-          setTotalMinutes(totalMinutes);
+          setTotalMinutes(_totalMinutes);
           setRows(_rows);
         });
       }).finally(() => {
@@ -259,7 +248,7 @@ export default (props: any) => {
 
   const revisionSwitch = (
     <>
-      <FormControl component="fieldset">
+      <FormControl className="revision-switch" component="fieldset">
         <FormGroup>
           <FormControlLabel
             control={<Switch checked={revisionMode} onChange={toggleRevisionMode('revisionMode')} value="gilad" />}
@@ -329,7 +318,7 @@ export default (props: any) => {
   );
 
   const revisionModeHeader = (
-    <>{isTicking? <Typography variant="h5" component="h6" gutterBottom>{timeElapsedTxt}</Typography>: null}</>
+    <>{isTicking? <Typography className="revision-mode-header" variant="h5" component="h6" gutterBottom>{timeElapsedTxt}</Typography>: null}</>
   );
 
   const onQuit = () => {
@@ -351,9 +340,9 @@ export default (props: any) => {
         }} onQuit={onQuit}></QuitDialog>
 
         {revisionSwitch}
-        {revisionMode ? revisionModeHeader : studyModeHeader}
+        {revisionMode ? null : studyModeHeader}
         {revisionMode ? null : studyModeSlider}
-        {timerButtons}
+        {timerButtons}{revisionMode? revisionModeHeader: null}
 
         <div className="table-cntr">
           <Typography variant="h5" component="h6" gutterBottom>
