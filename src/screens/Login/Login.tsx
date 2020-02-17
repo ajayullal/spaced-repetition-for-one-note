@@ -1,30 +1,21 @@
 import React, { useLayoutEffect } from 'react';
 import Layout from '../../components/layout/layout';
-import { apiConfig, routeConfig } from '../../services/config';
+import { routeConfig } from '../../services/config';
 import mons from '../../services/microsoft-one-note.service';
-import { routerService, clientStorage, userService } from '../../services';
-import PersonAdd from '@material-ui/icons/PersonAdd';
+import { routerService, userService } from '../../services';
 import './login.scss';
-import { IconButton, Typography } from '@material-ui/core';
 
-const serverBase = apiConfig.serverBase;
 
 export default (props: any) => {
-    const signInBtnUrl = `${serverBase}/images/microsoft_signin_button.svg`;
-
     useLayoutEffect(() => {
         if (userService.isLoggedIn()) {
-            props.history.push(routeConfig.notebooks.path)
+            routerService.goTo('notebooks');
         }
     }, [props.history]);
 
     function onSignInSuccess() {
-        if (mons.redirectUrl) {
-            props.history.push(mons.redirectUrl);
-            mons.redirectUrl = null;
-        } else {
-            props.history.push(routeConfig.notebooks.path)
-        }
+        routerService.goTo('notebooks');
+        // props.history.push(routeConfig.notebooks.path)
     }
 
     return (

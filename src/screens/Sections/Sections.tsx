@@ -10,7 +10,7 @@ export default withAuth((props: any) => {
     const [sections] = useSections(props.match.params.id);
 
     function viewPages(section: any){
-        props.history.push(routerService.getRouteUrl('pages', {id: section.id}));
+        routerService.goTo('pages', {id: section.id});
     }
 
     const sectionsGrid = (

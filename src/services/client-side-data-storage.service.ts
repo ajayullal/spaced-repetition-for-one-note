@@ -6,7 +6,11 @@ class ClientSideDataStorage {
     });
 
     setItemSync(key:string, value: string){
-        localStorage.setItem(key, value);
+        if(value){
+            localStorage.setItem(key, value);
+        }else{
+            this.removeItemSync(key);
+        }
     }
 
     getItemSync(key:string){

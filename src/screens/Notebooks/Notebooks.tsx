@@ -10,7 +10,7 @@ export default withAuth((props: any) => {
     const [noteBooks, errorMessage] = useBooks();
 
     const viewSections = (noteBook: any) => {
-        props.history.push(routerService.getRouteUrl('sections', { id: noteBook.id }));
+        routerService.goTo('sections', { id: noteBook.id });
     };
 
     const noteBooksGrid = (<CardList displayPropName='displayName' onClick={viewSections} items={noteBooks || []}></CardList>);

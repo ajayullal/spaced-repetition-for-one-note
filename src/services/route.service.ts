@@ -1,5 +1,6 @@
 import utilsService from './utils.service';
 import {Book, MenuBook, Note, Timer} from '@material-ui/icons';
+import {serverBase} from './config';
 
 export const routeConfig: { [key: string]: any }  = {
     notebooks: {
@@ -52,7 +53,17 @@ class RouteService{
 
     getRouteUrl(name: string, params: {} = {}){
         const routeInfo = this.getRouteInfo(name);
-        return utilsService.replaceParamsInUrl(routeInfo.path, params);
+        // return `${serverBase}#${utilsService.replaceParamsInUrl(routeInfo.path, params)}`;
+        return `${serverBase}/#${utilsService.replaceParamsInUrl(routeInfo.path, params)}`;
+    }
+
+    gotoUrl(url: string){
+        window.location.href = url;
+    }
+
+    goTo(name: string, params: {} = {}){
+        const url = this.getRouteUrl(name, params);
+        this.gotoUrl(url);
     }
 
     static getInstance(){

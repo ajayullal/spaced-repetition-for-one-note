@@ -1,11 +1,15 @@
 import * as Msal from 'msal';
 import {routeConfig as r} from './route.service';
 
+export const serverBase = 'http://localhost:3000';
+// export const serverBase = 'https://ajayullal.github.io/one-note-spaced-repetition';
+
 export const msalConfig: Msal.Configuration = {
     auth: {
         clientId: "7909dc21-ee19-4123-8ff2-9f21085c8447",
         authority: "https://login.microsoftonline.com/common",
-        redirectUri: "http://localhost:3000/auth"
+        // redirectUri: `${serverBase}/auth`
+        redirectUri: `${serverBase}/notebooks`
     },
     cache: {
         cacheLocation: "sessionStorage",

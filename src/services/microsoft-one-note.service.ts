@@ -5,6 +5,7 @@ import userService from './user.service';
 import utilsService from './utils.service';
 import clientStorage from "./client-side-data-storage.service";
 import errorHandlerService from "./error-handler.service";
+import routerService from './route.service';
 
 const axios = _axios.create({
     baseURL: 'https://graph.microsoft.com/v1.0/me/onenote',
@@ -59,19 +60,22 @@ class MicrosoftOneNoteApi {
         }
     }
 
+    onToken(tokenResponse: any){
+        this.setBearerToken(tokenResponse.accessToken);
+        this.setUserDetails(userService.userDetails);
+        window.location.href = routerService.getRouteUrl('notebooks');
+    }
+
     acquireTokenPopup() {
         //Always start with acquireTokenSilent to obtain a token in the signed in user from cache
         this.myMSALObj.acquireTokenSilent(this.requestObj).then((tokenResponse: any) => {
-            userService.userDetails = tokenResponse;
-            this.setBearerToken(tokenResponse.accessToken);
-            this.setUserDetails(userService.userDetails);
-            window.location.href = '';
+            this.onToken(tokenResponse)
         }).catch((error: any) => {
-            console.error(error);
+            alert(error);
             this.myMSALObj.acquireTokenPopup(this.requestObj).then((tokenResponse: any) => {
-                this.setBearerToken(tokenResponse.accessToken);
+                this.onToken(tokenResponse)
             }).catch((error: any) => {
-                console.log(error);
+                alert(error);
             });
         });
     }
@@ -81,11 +85,12 @@ class MicrosoftOneNoteApi {
     }
 
     onSignIn() {
-        // this.myMSALObj.handleRedirectCallback(this.authRedirectCallBack);
+        this.myMSALObj.handleRedirectCallback(this.authRedirectCallBack);
+        
         return this.myMSALObj.loginPopup(this.requestObj).then((loginResponse: any) => {
             this.acquireTokenPopup();
         }).catch((error: any) => {
-            console.log(error);
+            alert(error);
         });
     }
 
@@ -128,7 +133,7 @@ class MicrosoftOneNoteApi {
                 {
                     'target':'body',
                     'action':'append',
-                    'content': `<p>${sessionDetails.startDate}, ${sessionDetails.startTime}, ${sessionDetails.title}, ${sessionDetails.minutesSpentLearning}, ${sessionDetails.totalSessionMinutes}</p>`
+                    'content': `<p>${sessionDetails.startDate}, ${sessionDetails.startTime}, ${sessionDetails.title}, ${sessionDetails.minutesSpentLearning}, ${sessionDetails.totalSessionMinutes}, ${sessionDetails.repetition}</p>`
                   }
              ]
         ).catch(errorHandlerService.handleError);

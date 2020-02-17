@@ -11,7 +11,7 @@ export default withAuth((props: any) => {
     const timerUrl = routerService.getRouteUrl('timer');
 
     function viewPageInfo(page: any){
-        props.history.push(`${timerUrl}?pageUrl=${encodeURIComponent(page.self)}`);
+        routerService.gotoUrl(`${timerUrl}?pageUrl=${encodeURIComponent(page.self)}`);
     }
 
     const sectionsGrid = (

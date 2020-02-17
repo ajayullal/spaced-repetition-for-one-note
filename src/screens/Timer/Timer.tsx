@@ -7,6 +7,11 @@ import QuitDialog from './QuitDialog';
 import Paper from '@material-ui/core/Paper';
 import './_timer.scss';
 
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650
@@ -22,11 +27,14 @@ export default (props: any) => {
   let [rows, setRows]: [any[], any] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalMinutes, setTotalMinutes] = useState();
+  const [revisionMode, setRevisionMode] = useState(false);
+  const [timeElapsedTxt, setTimeElapsedTxt] = useState(''); 
 
   const startMillis = useRef(new Date());
   const sliderValueRef = useRef(30);
   const counterIntervalRef: any = useRef();
-  const pageDetails = useRef({title: ''});
+  const pageDetails = useRef({ title: '' });
+  const revisionClicked = useRef(false);
 
   const classes = useStyles();
 
@@ -53,7 +61,8 @@ export default (props: any) => {
                 startTime: content ? content[1] : '',
                 title: content ? content[2].trim() : '',
                 minutesSpentLearning: content ? content[3] : '',
-                totalSessionMinutes: content ? content[4] : ''
+                totalSessionMinutes: content ? content[4] : '',
+                repetition: content ? (content[5].trim() === 'false'? 'No': 'Yes') : '',
               });
               totalMinutes += Number(content[3]);
             }
@@ -66,7 +75,7 @@ export default (props: any) => {
         setLoading(false);
       });
     } else {
-      props.history.push(routerService.getHomeRoute());
+      routerService.goTo(routerService.getHomeRoute()['name'].toLowerCase());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -116,31 +125,34 @@ export default (props: any) => {
     return (millisLeft / totalMillis) * 100;
   };
 
-  const stopTimer = useCallback(() => {
-    const totalMillis = sliderValueRef.current * 60 * 1000;
-    const totalMillisSpeantLeaning = (Date.now() - startMillis.current.getTime());
-    const minutesSpentLearning = totalMillisSpeantLeaning / (60000);
-    const totalSessionMinutes = totalMillis / (60000);
+  const getRowDetails = (totalMillisSpeantLeaning: number, totalMillis: number) => {
     const startDate = `${startMillis.current.getDate()}-${startMillis.current.getMonth() + 1}-${startMillis.current.getFullYear()}`;
     const startTime = `${startMillis.current.getHours()}:${startMillis.current.getMinutes()}:${startMillis.current.getSeconds()}`;
 
-    const rowDetails = {
-      minutesSpentLearning,
+    return {
       startDate,
       startTime,
       title: pageDetails.current.title,
-      totalSessionMinutes
+      totalSessionMinutes: totalMillis / (60000),
+      minutesSpentLearning: totalMillisSpeantLeaning / (60000),
+      repetition: false
     };
+  };
+
+  const stopTimer = useCallback(() => {
+    const totalMillis = sliderValueRef.current * 60 * 1000;
+    const totalMillisSpeantLeaning = (Date.now() - startMillis.current.getTime());
+    const rowDetails = getRowDetails(totalMillisSpeantLeaning, totalMillis);
 
     // Update one note page which tracks learning
     mons.updateOneNotePage(rowDetails).then(() => {
-      setRows((rows: any) => [...rows, rowDetails]);
+      setRows((rows: any) => [...rows, {...rowDetails, repetition: 'No'}]);
     });
 
     clearInterval(counterIntervalRef.current);
     setTicking(false);
     // Store time spent studying 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startTimer = useCallback(() => {
@@ -178,6 +190,7 @@ export default (props: any) => {
                 <TableCell align="center">Time</TableCell>
                 <TableCell align="center">Minutes spent</TableCell>
                 <TableCell align="center">Total session minutes</TableCell>
+                <TableCell align="center">Repetition</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -188,6 +201,7 @@ export default (props: any) => {
                   <TableCell align="center">{row.startTime}</TableCell>
                   <TableCell align="center">{row.minutesSpentLearning}</TableCell>
                   <TableCell align="center">{row.totalSessionMinutes}</TableCell>
+                  <TableCell align="center">{row.repetition}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -196,58 +210,150 @@ export default (props: any) => {
       ) : <Typography variant="h6" component="h6" color="textSecondary" gutterBottom>Nothing to display</Typography>
   );
 
+  const toggleRevisionMode = (name: any) => (event: any) => {
+    if (isTicking) {
+      revisionClicked.current = true;
+      setQuitDialog(true)
+    } else {
+      setRevisionMode(isRevisionMode => !isRevisionMode);
+    }
+  };
+
+  const getRevisionTime = () => {
+    const seconds = Math.trunc((Date.now() - startMillis.current.getTime())/1000);
+    const minutes = Math.trunc(seconds / 60);
+    return {
+      minutes,
+      seconds
+    };
+  };
+
+  const getTimeElapsedTxt = () => {
+    const time = getRevisionTime();
+    return `Time Elapsed - ${time.minutes > 0? time.minutes+" minutes and ": ''}${time.seconds % 60} seconds`;
+  };
+
+  const checkAndSetRevisionMode = () => {
+    if (!revisionMode) {
+      // Revision started
+      revisionClicked.current = false;
+      setRevisionMode(true);
+
+      if(isTicking){
+        stopTimer();
+      }
+    }else{
+      // Revision Ended
+      clearInterval(counterIntervalRef.current);
+      const revisionTime = getRevisionTime();
+      const totalMillisSpeantLeaning = ((revisionTime.minutes * 60) + revisionTime.seconds) * 1000;
+      const rowDetails = getRowDetails(totalMillisSpeantLeaning, totalMillisSpeantLeaning);
+      rowDetails.repetition = true;
+        
+      // Update one note page which tracks learning
+      mons.updateOneNotePage(rowDetails).then(() => {
+        setRows((rows: any) => [...rows, {...rowDetails, repetition: 'Yes'}]);
+      });
+    }
+  };
+
+  const revisionSwitch = (
+    <>
+      <FormControl component="fieldset">
+        <FormGroup>
+          <FormControlLabel
+            control={<Switch checked={revisionMode} onChange={toggleRevisionMode('revisionMode')} value="gilad" />}
+            label="Revision Mode" />
+        </FormGroup>
+      </FormControl>
+      <br />
+    </>
+  );
+
+  const studyModeHeader = (
+    !isTicking ?
+  <Typography variant="h5" component="h6" gutterBottom>Study {pageDetails.current && `"${pageDetails.current.title}"`} for {sliderValue} Minutes</Typography> :
+      <Typography variant="h5" component="h6" gutterBottom>{pageDetails.current && `"${pageDetails.current.title}"`}: {timeLeft}</Typography>
+  );
+
+  const studyModeSlider = useMemo(() => (
+    <>
+      <div style={{
+        minHeight: '45px',
+        paddingTop: isTicking ? '15px' : '0px',
+        paddingBottom: isTicking ? '15px' : '0px'
+      }}>
+        {
+          !isTicking ? <PrettoSlider
+            onChange={(event, value) => {
+              sliderValueRef.current = Number(value);
+              setSliderValue(sliderValueRef.current);
+            }}
+            valueLabelDisplay="auto"
+            aria-label="pretto slider"
+            min={1}
+            step={5}
+            max={120}
+            defaultValue={sliderValueRef.current} /> :
+            <LinearProgress
+              variant="buffer"
+              value={100 - timeLeftPercent}
+              valueBuffer={0}
+              color="secondary"
+            />
+        }
+      </div>
+    </>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [isTicking, rows, timeLeftPercent]);
+
+  const checkAndStartTimer = () => {
+    if(revisionMode){
+      startMillis.current = new Date();
+  
+      counterIntervalRef.current = setInterval(() => {
+        setTimeElapsedTxt(getTimeElapsedTxt());
+      }, 1000);
+    }else{
+      startTimer();
+    }
+    setTicking(true);
+  };
+
+  const timerButtons = (
+    !isTicking ?
+      (<Button onClick={() => {checkAndStartTimer()}} variant="contained" color="primary">Start</Button>) :
+      (<Button onClick={() => {
+        setQuitDialog(true)
+      }} variant="contained" color="primary">{revisionMode? 'Stop': 'Quit'}</Button>)
+  );
+
+  const revisionModeHeader = (
+    <>{isTicking? <Typography variant="h5" component="h6" gutterBottom>{timeElapsedTxt}</Typography>: null}</>
+  );
+
+  const onQuit = () => {
+    if (revisionClicked.current || revisionMode) {
+      checkAndSetRevisionMode();
+    }else{
+      stopTimer();
+    }
+    setQuitDialog(false);
+    setTicking(false);
+  };
+  
   return (
     <>
       <Layout hideNavDrawer={true} routeInfo={routerService.getRouteInfo('timer')}>
-        <QuitDialog open={openQuitDialog} onClose={() => { setQuitDialog(false) }} onQuit={() => {
+        <QuitDialog open={openQuitDialog} onClose={() => {
+          revisionClicked.current = false;
           setQuitDialog(false)
-          stopTimer()
-        }}></QuitDialog>
+        }} onQuit={onQuit}></QuitDialog>
 
-        {
-          !isTicking ?
-            <Typography variant="h5" component="h6" gutterBottom>Study {pageDetails.current && `"${pageDetails.current.title}"`} for {sliderValue} Minutes</Typography> :
-            <Typography variant="h5" component="h6" gutterBottom>{pageDetails.current && `"${pageDetails.current.title}"`}: {timeLeft}</Typography>
-        }
-
-        {useMemo(() => (
-          <>
-            <div style={{
-              minHeight: '45px',
-              paddingTop: isTicking ? '15px' : '0px',
-              paddingBottom: isTicking ? '15px' : '0px'
-            }}>
-              {
-                !isTicking ? <PrettoSlider
-                  onChange={(event, value) => {
-                    sliderValueRef.current = Number(value);
-                    setSliderValue(sliderValueRef.current);
-                  }}
-                  valueLabelDisplay="auto"
-                  aria-label="pretto slider"
-                  min={1}
-                  step={5}
-                  max={120}
-                  defaultValue={ sliderValueRef.current } /> :
-                  <LinearProgress
-                    variant="buffer"
-                    value={100 - timeLeftPercent}
-                    valueBuffer={0}
-                    color="secondary"
-                  />
-              }
-            </div>
-
-            {
-              !isTicking ?
-                (<Button onClick={startTimer} variant="contained" color="primary">Start</Button>) :
-                (<Button onClick={() => {
-                  setQuitDialog(true)
-                }} variant="contained" color="primary">Quit</Button>)
-            }
-          </>
-          // eslint-disable-next-line react-hooks/exhaustive-deps
-        ), [isTicking, rows, timeLeftPercent])}
+        {revisionSwitch}
+        {revisionMode ? revisionModeHeader : studyModeHeader}
+        {revisionMode ? null : studyModeSlider}
+        {timerButtons}
 
         <div className="table-cntr">
           <Typography variant="h5" component="h6" gutterBottom>

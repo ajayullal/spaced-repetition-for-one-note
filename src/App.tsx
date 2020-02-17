@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Screens from './screens';
 import { routeConfig } from './services/config';
 
 const App: React.FC = () => {
+  useEffect(() => {
+    document.title = "Spaced repetition for one note";
+  }, []);
+
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Switch>
         <Route path={routeConfig.notebooks.path} exact component={Screens.Notebooks} />
         <Route path={routeConfig.login.path} exact component={Screens.Login} />
@@ -16,7 +20,7 @@ const App: React.FC = () => {
         <Route path='/auth' exact component={Screens.Timer} />
         <Redirect to={routeConfig.notebooks.path} />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
