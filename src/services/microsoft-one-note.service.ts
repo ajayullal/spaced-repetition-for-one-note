@@ -122,7 +122,10 @@ class MicrosoftOneNoteApi {
     }
 
     getAllPages(sectionId: string) {
-        return axios.get(utilsService.replaceParamsInUrl(apiEndPoints.pages, { id: sectionId })).then(this.returnValue).catch(errorHandlerService.handleError);
+        return axios.get(utilsService.replaceParamsInUrl(apiEndPoints.pages, { id: sectionId })).then(response => {
+            const _response = this.returnValue(response);
+            return _response.filter((page: any) => page.title);
+        }).catch(errorHandlerService.handleError);
     }
 
     getPage(selfUrl: string) {
