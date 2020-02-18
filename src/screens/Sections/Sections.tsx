@@ -20,10 +20,10 @@ export default withAuth((props: any) => {
 
     const sectionsGrid = (
         <>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <TextField
-                        className='searchBox'
+                  <TextField
+                        fullWidth
+                        autoComplete="off"
+                        className="searchBox"
                         id="outlined-secondary"
                         label="Search Sections"
                         variant="outlined"
@@ -38,12 +38,8 @@ export default withAuth((props: any) => {
                             setFilteredSections(_filteredSections);
                         }}
                     />
-                </Grid>
-
-                <Grid item xs={12}>
+                    
                     <CardList displayPropName='displayName' onClick={viewPages} items={filteredSections || []}></CardList>
-                </Grid>
-            </Grid>
         </>
     );
 

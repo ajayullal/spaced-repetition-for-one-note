@@ -115,7 +115,7 @@ export default (props: any) => {
   };
 
   const getRowDetails = (totalMillisSpeantLeaning: number, totalMillis: number) => {
-    const startDate = `${startMillis.current.getDate()}-${startMillis.current.getMonth() + 1}-${startMillis.current.getFullYear()}`;
+    const startDate = `${startMillis.current.getMonth() + 1}/${startMillis.current.getDate()}/${startMillis.current.getFullYear()}`;
     const startTime = `${startMillis.current.getHours()}:${startMillis.current.getMinutes()}:${startMillis.current.getSeconds()}`;
 
     return {

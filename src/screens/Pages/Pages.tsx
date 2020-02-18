@@ -1,21 +1,37 @@
 import withAuth from "../../HOCs/withAuth";
 import usePages from "./usePages";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import CardList from "../../components/card-list/CardList";
 import Layout from "../../components/layout/layout";
-import { LinearProgress, TextField, Grid } from "@material-ui/core";
+import { LinearProgress, TextField, Typography } from "@material-ui/core";
 import routerService from '../../services/route.service';
-import './_pages.scss';
+import useDb from '../../hooks/useDB';
+import pagesService from '../../services/pages.service';
 
 export default withAuth((props: any) => {
     const [pages, loading]: any[] = usePages(props.match.params.id);
     const [filteredPages, setFilteredPages] = useState(pages);
     const timerUrl = routerService.getRouteUrl('timer');
+    const [db, dblLoading] = useDb();
+
+    const mergeDBAndPageData = useCallback(() => {
+        pagesService.mergeDBAndPageData(db, pages);
+        console.log(pages);
+        setFilteredPages(pages);
+    }, [db, pages]);
 
     useEffect(() => {
-        setFilteredPages(pages);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (db && pages) {
+            mergeDBAndPageData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pages]);
+
+    useEffect(() => {
+        if (db && pages) {
+            mergeDBAndPageData()
+        }
+    }, [db, mergeDBAndPageData, pages]);
 
     function viewPageInfo(page: any) {
         routerService.gotoUrl(`${timerUrl}?pageUrl=${encodeURIComponent(page.self)}`);
@@ -23,30 +39,47 @@ export default withAuth((props: any) => {
 
     const sectionsGrid = (
         <>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <TextField
-                        className='searchBox'
-                        id="outlined-secondary"
-                        label="Search Pages"
-                        variant="outlined"
-                        onChange={(event: any) => {
-                            const searchTxt = event.target.value.toLowerCase();
-                            
-                            const _filteredPages = pages.filter((page: any) => {
-                                const pageTitle = page.title.toLowerCase();
-                                return pageTitle.startsWith(searchTxt);
-                            });
+            <TextField
+                fullWidth
+                autoComplete="off"
+                className="searchBox"
+                id="outlined-secondary"
+                label="Search Pages"
+                variant="outlined"
+                onChange={(event: any) => {
+                    const searchTxt = event.target.value.toLowerCase();
 
-                            setFilteredPages(_filteredPages);
-                        }}
-                    />
-                </Grid>
+                    const _filteredPages = pages.filter((page: any) => {
+                        const pageTitle = page.title.toLowerCase();
+                        return pageTitle.startsWith(searchTxt);
+                    });
 
-                <Grid item xs={12}>
-                    <CardList displayPropName='title' onClick={viewPageInfo} items={filteredPages}></CardList>
-                </Grid>
-            </Grid>
+                    setFilteredPages(_filteredPages);
+                }}
+            />
+
+            <CardList
+                onClick={viewPageInfo}
+                items={filteredPages}
+                render={(item: any) => {
+                    return (
+                        <div key={item.id}>
+                            <Typography color="textSecondary" gutterBottom>
+                                {item['title']}
+                            </Typography>
+
+                            <Typography color="textSecondary" gutterBottom>
+                                Last revisited:  
+                                {item.sessions.length > 0? item.sessions.map(({ daysDiffFromToday, startDate, startTime }: any, index: number) => {
+                                    return (<>
+                                        <span key={`${startDate}*${startTime}`}> {daysDiffFromToday}</span>{index !== item.sessions.length-1? ', ' : ' days ago'}
+                                    </>)
+                                }): ' Never'}
+                            </Typography>
+                        </div>
+                    );
+                }}>
+            </CardList>
         </>
     );
 
@@ -54,7 +87,7 @@ export default withAuth((props: any) => {
         <Layout hideNavDrawer={true} routeInfo={routerService.getRouteInfo('pages')}>
             <>
                 {
-                    loading ? (<LinearProgress color="secondary" />) : sectionsGrid
+                    (loading || dblLoading) ? (<LinearProgress color="secondary" />) : sectionsGrid
                 }
             </>
         </Layout>

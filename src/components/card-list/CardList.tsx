@@ -9,9 +9,19 @@ const useStyles = makeStyles({
 });
 
 
-export default ({items, onClick, displayPropName, id}: any) => {
+export default ({items, onClick, displayPropName, render = null}: any) => {
     const classes = useStyles();
 
+    if(!render){
+        render = (item: any) => {
+            return (
+                <Typography color="textSecondary" gutterBottom>
+                    {item[displayPropName]}
+                </Typography>
+            );
+        }
+    }
+    
     return (
         items.length > 0?
         (<Grid spacing={5} container>
@@ -21,9 +31,9 @@ export default ({items, onClick, displayPropName, id}: any) => {
                         <Grid onClick={() => onClick(item)} xs={12} item md={6} key={item.id}>
                             <Card className={classes.card} variant="outlined">
                                 <CardContent>
-                                    <Typography color="textSecondary" gutterBottom>
-                                        {item[displayPropName]}
-                                    </Typography>
+                                    {
+                                          render(item)   
+                                    }
                                 </CardContent>
                             </Card>
                         </Grid>

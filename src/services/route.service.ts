@@ -27,6 +27,10 @@ export const routeConfig: { [key: string]: any }  = {
         name: 'Timer',
         path: '/timer',
         icon: Timer
+    },
+    recentlyRevisedPages: {
+        name: 'Recently Revised Pages',
+        path: '/recentlyRevisedPages'
     }
 };
 
