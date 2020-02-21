@@ -17,8 +17,12 @@ class ErrorHandlerService {
     }
 
     handleError = (error: any) => {
+        console.error(error);
+
         switch (error.message) {
-            case errorMessage['401']: this.logout()
+            case errorMessage['401']: 
+                        this.logout();
+                        break;
         }
 
         return Promise.reject(error.message || error.response.data.message)

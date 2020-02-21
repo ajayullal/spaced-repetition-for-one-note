@@ -13,5 +13,5 @@ export default () => {
         });
     }, [setLoading]);
 
-    return [db, loading];
+    return [db, loading, setDb];
 };

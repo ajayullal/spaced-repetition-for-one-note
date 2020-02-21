@@ -9,7 +9,7 @@ const useStyles = makeStyles({
 });
 
 
-export default ({items, onClick, displayPropName, render = null}: any) => {
+export default ({items, onClick, displayPropName, render = null, keyProp}: any) => {
     const classes = useStyles();
 
     if(!render){
@@ -28,7 +28,7 @@ export default ({items, onClick, displayPropName, render = null}: any) => {
             {
                 items.map((item: any) => {
                     return (
-                        <Grid onClick={() => onClick(item)} xs={12} item md={6} key={item.id}>
+                        <Grid onClick={() => onClick(item)} xs={12} item md={6} key={item[keyProp]? item[keyProp]: item.id}>
                             <Card className={classes.card} variant="outlined">
                                 <CardContent>
                                     {

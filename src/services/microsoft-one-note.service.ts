@@ -133,12 +133,28 @@ class MicrosoftOneNoteApi {
     }
 
     updateOneNotePage(sessionDetails: any) {
+        const rowProperties = ['startDate', 
+                               'startTime', 
+                               'title', 
+                               'minutesSpentLearning', 
+                               'totalSessionMinutes', 
+                               'repetition',
+                               'pageId',
+                               'sectionName',
+                               'sectionId'];
+
+        let content = '';
+
+        rowProperties.forEach((rowProp, index) => {
+            content += `${sessionDetails[rowProp]}${index !== (rowProperties.length - 1)? this._dbCellDelimiter: ''}`
+        });
+
         return axios.patch(apiEndPoints.content,
             [
                 {
                     'target':'body',
                     'action':'append',
-                    'content': `<p>${sessionDetails.startDate}${this._dbCellDelimiter} ${sessionDetails.startTime}${this._dbCellDelimiter} ${sessionDetails.title}${this._dbCellDelimiter} ${sessionDetails.minutesSpentLearning}${this._dbCellDelimiter} ${sessionDetails.totalSessionMinutes}${this._dbCellDelimiter} ${sessionDetails.repetition}</p>`
+                    'content': `<p>${content}</p>`
                   }
              ]
         ).then(data => this._db = null).catch(errorHandlerService.handleError);
@@ -159,6 +175,9 @@ class MicrosoftOneNoteApi {
                     minutesSpentLearning: content ? Number(content[3]) : '',
                     totalSessionMinutes: content ? content[4] : '',
                     repetition: content ? (content[5].trim() === 'false'? 'No': 'Yes') : '',
+                    pageId: content ? content[6] : '',
+                    sectionName: content ? content[7] : '',
+                    sectionId: content ? content[8] : ''
                   });
                 });
                 resolve(_rows);
@@ -172,7 +191,7 @@ class MicrosoftOneNoteApi {
         }else{
             return axios.get(apiEndPoints.content).then(db => {
                 return this._db = db;
-             });
+             }).catch(errorHandlerService.handleError);
         }
     }
 

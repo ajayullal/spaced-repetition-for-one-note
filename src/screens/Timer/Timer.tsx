@@ -33,7 +33,7 @@ export default (props: any) => {
   const startMillis = useRef(new Date());
   const sliderValueRef = useRef(30);
   const counterIntervalRef: any = useRef();
-  const pageDetails = useRef({ title: '' });
+  const pageDetails: any = useRef();
   const revisionClicked = useRef(false);
 
   const classes = useStyles();
@@ -124,7 +124,10 @@ export default (props: any) => {
       title: pageDetails.current.title,
       totalSessionMinutes: totalMillis / (60000),
       minutesSpentLearning: totalMillisSpeantLeaning / (60000),
-      repetition: false
+      repetition: false,
+      pageId: pageDetails.current.id,
+      sectionName: pageDetails.current.parentSection.displayName,
+      sectionId: pageDetails.current.parentSection.id
     };
   };
 
@@ -261,7 +264,7 @@ export default (props: any) => {
 
   const studyModeHeader = (
     !isTicking ?
-  <Typography variant="h5" component="h6" gutterBottom>Study {pageDetails.current && `"${pageDetails.current.title}"`} for {sliderValue} Minutes</Typography> :
+      <Typography variant="h5" component="h6" gutterBottom>Study {pageDetails.current && `"${pageDetails.current.title}"`} for {sliderValue} Minutes</Typography> :
       <Typography variant="h5" component="h6" gutterBottom>{pageDetails.current && `"${pageDetails.current.title}"`}: {timeLeft}</Typography>
   );
 

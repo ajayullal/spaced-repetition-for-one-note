@@ -16,16 +16,8 @@ export default withAuth((props: any) => {
 
     const mergeDBAndPageData = useCallback(() => {
         pagesService.mergeDBAndPageData(db, pages);
-        console.log(pages);
         setFilteredPages(pages);
     }, [db, pages]);
-
-    useEffect(() => {
-        if (db && pages) {
-            mergeDBAndPageData();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pages]);
 
     useEffect(() => {
         if (db && pages) {
@@ -71,9 +63,9 @@ export default withAuth((props: any) => {
                             <Typography color="textSecondary" gutterBottom>
                                 Last revisited:  
                                 {item.sessions.length > 0? item.sessions.map(({ daysDiffFromToday, startDate, startTime }: any, index: number) => {
-                                    return (<>
-                                        <span key={`${startDate}*${startTime}`}> {daysDiffFromToday}</span>{index !== item.sessions.length-1? ', ' : ' days ago'}
-                                    </>)
+                                    return (<span key={`${startDate}*${startTime}`}>
+                                        <span> {daysDiffFromToday}</span>{index !== item.sessions.length-1? ', ' : ' days ago'}
+                                    </span>)
                                 }): ' Never'}
                             </Typography>
                         </div>
