@@ -2,16 +2,15 @@ import React from 'react';
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Hidden, Typography } from '@material-ui/core';
 import { createStyles, Theme, makeStyles, useTheme } from '@material-ui/core/styles';
 import { themeConfig, appTexts } from '../../services/config';
-import BookIcon from '@material-ui/icons/Book';
 import INavDrawer from './INavDrawer';
 import logo from '../../logo.svg';
 import './nav-drawer.scss';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         drawer: {
             [theme.breakpoints.up('sm')]: {
-                width: themeConfig.drawerWidth,
                 flexShrink: 0,
             }
         },
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export default ({ open, onClose }: INavDrawer) => {
+export default ({ open, onClose, children }: INavDrawer) => {
     const classes = useStyles();
     const theme = useTheme();
 
@@ -40,12 +39,15 @@ export default ({ open, onClose }: INavDrawer) => {
             <div className="logo-container">
                 <img src={logo} width="40" height="40" />
                 <Typography className="app-name" variant="h6">
-                    {appTexts.appName}
+                    {/* {appTexts.appName} */}
+                    <ArrowBackIosIcon onClick={onClose} className="closeIcon"></ArrowBackIosIcon>
                 </Typography>
             </div>
 
             <Divider />
-        </div>
+
+            {children}
+        </div >
     );
 
     return (
@@ -73,8 +75,8 @@ export default ({ open, onClose }: INavDrawer) => {
                     classes={{
                         paper: classes.drawerPaper,
                     }}
-                    variant="permanent"
-                    open
+                    variant="temporary"
+                    open={open}
                 >
                     {drawer}
                 </Drawer>

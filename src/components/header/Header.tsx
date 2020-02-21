@@ -6,6 +6,7 @@ import IHeader from "./IHeader";
 import { themeConfig } from '../../services/config';
 import NavDrawer from '../nav-drawer';
 import { userService, routerService } from '../../services';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = (hideNavDrawer: IHeader['hideNavDrawer']) => {
     return makeStyles((theme: Theme) =>
@@ -36,7 +37,7 @@ const useStyles = (hideNavDrawer: IHeader['hideNavDrawer']) => {
     );
 }
 
-export default ({ pageName, hideNavDrawer = false, history }: IHeader) => {
+export default ({ pageName, hideNavDrawer = false, history, toggleNavDrawer }: IHeader) => {
     const classes = useStyles(hideNavDrawer)();
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const handleDrawerToggle = () => {
@@ -63,15 +64,6 @@ export default ({ pageName, hideNavDrawer = false, history }: IHeader) => {
         <>
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
-                    {/* <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        className={classes.menuButton}
-                    >
-                        <Home />
-                    </IconButton> */}
                     <Typography variant="h6" noWrap>
                         <>
                             <IconButton
@@ -79,8 +71,8 @@ export default ({ pageName, hideNavDrawer = false, history }: IHeader) => {
                                 aria-label="open drawer"
                                 edge="start"
                                 className={classes.homeButton}
-                                onClick={gotoHome}>
-                                <Home />
+                                onClick={toggleNavDrawer}>
+                                 <MenuIcon />
                             </IconButton>
                             <span style={{ position: 'relative', top: '2px' }}>{pageName}</span>
                         </>

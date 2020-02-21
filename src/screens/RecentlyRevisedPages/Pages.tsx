@@ -7,6 +7,7 @@ import useDb from '../../hooks/useDB';
 import CardList from '../../components/card-list/CardList';
 import { LinearProgress, TextField, Typography } from '@material-ui/core';
 import pagesService from '../../services/pages.service';
+import PageList from '../../components/pagesList/pagesList';
 
 export default withAuth((props: any) => {
     const [db, loading, setDb] = useDb();
@@ -56,33 +57,9 @@ export default withAuth((props: any) => {
                     setFilteredPages(_filteredPages);
                 }}
             />
+            
 
-            <CardList
-                onClick={viewPageInfo}
-                items={filteredPages}
-                keyProp='pageId'
-                render={(item: any) => {
-                    return (
-                        <div key={item}>
-                            <Typography color="textSecondary" gutterBottom>
-                                {item['title']}
-                            </Typography>
-
-                            <Typography color="textSecondary" gutterBottom>
-                                <span>{item.sectionName}</span>
-                            </Typography>
-
-                            <Typography color="textSecondary" gutterBottom>
-                                Last revisited:
-                     
-                                {item.sessions.length > 0 ? item.sessions.map(({ daysDiffFromToday, startDate, startTime }: any, index: number) => {
-                                    return (<span key={`${startDate}*${startTime}`}> {daysDiffFromToday}{index !== item.sessions.length - 1 ? ', ' : ' days ago'}</span>)
-                                }) : ' Never'}
-                            </Typography>
-                        </div>
-                    );
-                }}>
-            </CardList>
+            <PageList keyProp='pageId' viewPageInfo={viewPageInfo} filteredPages={filteredPages}></PageList>
         </>
     );
 

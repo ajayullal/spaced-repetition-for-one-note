@@ -1,5 +1,6 @@
 export default interface IHeaderProps{
     pageName: string,
     hideNavDrawer: boolean,
-    history: any
+    history: any,
+    toggleNavDrawer: any
 }

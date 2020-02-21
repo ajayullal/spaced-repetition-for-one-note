@@ -1,4 +1,5 @@
 export default interface INavDrawer{
     open: boolean,
-    onClose: () => void
+    onClose: () => void,
+    children: any
 }

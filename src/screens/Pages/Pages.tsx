@@ -7,6 +7,7 @@ import { LinearProgress, TextField, Typography } from "@material-ui/core";
 import routerService from '../../services/route.service';
 import useDb from '../../hooks/useDB';
 import pagesService from '../../services/pages.service';
+import PageList from '../../components/pagesList/pagesList';
 
 export default withAuth((props: any) => {
     const [pages, loading]: any[] = usePages(props.match.params.id);
@@ -50,28 +51,7 @@ export default withAuth((props: any) => {
                 }}
             />
 
-            <CardList
-                onClick={viewPageInfo}
-                items={filteredPages}
-                render={(item: any) => {
-                    return (
-                        <div key={item.id}>
-                            <Typography color="textSecondary" gutterBottom>
-                                {item['title']}
-                            </Typography>
-
-                            <Typography color="textSecondary" gutterBottom>
-                                Last revisited:  
-                                {item.sessions.length > 0? item.sessions.map(({ daysDiffFromToday, startDate, startTime }: any, index: number) => {
-                                    return (<span key={`${startDate}*${startTime}`}>
-                                        <span> {daysDiffFromToday}</span>{index !== item.sessions.length-1? ', ' : ' days ago'}
-                                    </span>)
-                                }): ' Never'}
-                            </Typography>
-                        </div>
-                    );
-                }}>
-            </CardList>
+            <PageList viewPageInfo={viewPageInfo} filteredPages={filteredPages}></PageList>
         </>
     );
 
