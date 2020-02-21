@@ -9,13 +9,13 @@ Spaced repetition is an evidence-based learning technique where newly learnt and
 This app uses your one note account itself as a database to store app data. To run the app, create a page called 'Database' under a section called 'Spaced Learning DB' in a notebook caled 'MISC' in your onenote app and then run 'npm i' and 'npm start'.
 
 # Notebooks 
-![Notebooks](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/notebooks.png)
+![Notebooks](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/notebooks.jpg)
 
 # Sections 
-![Sections](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/sections.png)
+![Sections](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/sections.jpg)
 
 # Pages
-![Pages](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/pages.png)
+![Pages](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/pages.jpg)
 
 # Timer
-![Timer](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/timer.png)
+![Timer](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/timer.jpg)
