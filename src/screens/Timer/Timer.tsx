@@ -337,10 +337,11 @@ export default (props: any) => {
   return (
     <>
       <Layout hideNavDrawer={true} routeInfo={routerService.getRouteInfo('timer')}>
+        {/*Quit Dialog*/}
         <QuitDialog open={openQuitDialog} onClose={() => {
           revisionClicked.current = false;
           setQuitDialog(false)
-        }} onQuit={onQuit}></QuitDialog>
+        }} onQuit={onQuit} isRevision={revisionMode}></QuitDialog>
 
         {revisionSwitch}
         {revisionMode ? null : studyModeHeader}
