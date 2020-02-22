@@ -23,7 +23,7 @@ export default ({items, onClick, displayPropName, render = null, keyProp}: any) 
     }
     
     return (
-        items.length > 0?
+        items?.length > 0?
         (<Grid spacing={5} container>
             {
                 items.map((item: any) => {
