@@ -1,6 +1,8 @@
 # Spaced repetition
 Spaced repetition is an evidence-based learning technique where newly learnt and more difficult content are revised more frequently while older and less difficult content are revised less frequently in order to exploit the psychological spacing effect. The use of spaced repetition has been shown to increase rate of learning.
 
+*** This is a SPA with no server backend and uses OAUTH to communicate with Microsoft identity platform to acquire an aceess token.
+
 ![Spaced repetition](https://github.com/ajayullal/spaced-learning-for-one-note/blob/master/images/spaced-repetition.jpg)
 
 [Learn more](https://en.wikipedia.org/wiki/Spaced_repetition)
