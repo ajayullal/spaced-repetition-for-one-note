@@ -8,6 +8,7 @@ import routerService from '../../services/route.service';
 import useDb from '../../hooks/useDB';
 import pagesService from '../../services/pages.service';
 import PageList from '../../components/pagesList/pagesList';
+import utilsService from "../../services/utils.service";
 
 export default withAuth((props: any) => {
     const [pages, loading]: any[] = usePages(props.match.params.id);
@@ -43,8 +44,7 @@ export default withAuth((props: any) => {
                     const searchTxt = event.target.value.toLowerCase();
 
                     const _filteredPages = pages.filter((page: any) => {
-                        const pageTitle = page.title.toLowerCase();
-                        return pageTitle.startsWith(searchTxt);
+                        return utilsService.containsWord(page.title, searchTxt);
                     });
 
                     setFilteredPages(_filteredPages);

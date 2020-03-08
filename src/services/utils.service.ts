@@ -8,6 +8,15 @@ class UtilsService{
 
         return url;
     }
+
+    containsWord(srcStr: string, searchStr: string){
+        searchStr = searchStr.toLowerCase().trim();
+        srcStr = srcStr.toLowerCase().trim();
+        const words = srcStr.split(' ');
+        return words.filter((word: string) => {
+            return word.startsWith(searchStr);
+        }).length > 0;
+    }
     
     static getInstance(){
         if(!UtilsService._instance){

@@ -4,10 +4,10 @@ import './_pages.module.scss';
 import Layout from '../../components/layout/layout';
 import routerService from '../../services/route.service';
 import useDb from '../../hooks/useDB';
-import CardList from '../../components/card-list/CardList';
-import { LinearProgress, TextField, Typography } from '@material-ui/core';
+import { LinearProgress, TextField } from '@material-ui/core';
 import pagesService from '../../services/pages.service';
 import PageList from '../../components/pagesList/pagesList';
+import utilsService from '../../services/utils.service';
 
 export default withAuth((props: any) => {
     const [db, loading, setDb] = useDb();
@@ -51,7 +51,7 @@ export default withAuth((props: any) => {
                         const pageTitle = page.title.toLowerCase();
                         const sectionName = page.sectionName.toLowerCase();
                         const sessions = page.sessions;
-                        return pageTitle.startsWith(searchTxt) || sectionName.startsWith(searchTxt) || sessions.find((section: any) => section.daysDiffFromToday === Number(searchTxt))
+                        return utilsService.containsWord(pageTitle, searchTxt) || utilsService.containsWord(sectionName, searchTxt) || sessions.find((section: any) => section.daysDiffFromToday === Number(searchTxt))
                     });
 
                     setFilteredPages(_filteredPages);

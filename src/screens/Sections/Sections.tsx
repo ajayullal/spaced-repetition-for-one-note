@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import Layout from '../../components/layout/layout';
-import { LinearProgress, Grid, TextField } from '@material-ui/core';
+import { LinearProgress, TextField } from '@material-ui/core';
 import withAuth from '../../HOCs/withAuth';
 import useSections from './useSections';
 import CardList from '../../components/card-list/CardList';
-import routerService from '../../services/route.service';
+import {routerService, utilsService} from '../../services';
 
 export default withAuth((props: any) => {
     const [sections] = useSections(props.match.params.id);
@@ -32,7 +32,7 @@ export default withAuth((props: any) => {
                             
                             const _filteredSections = sections.filter((section: any) => {
                                 const sectionName = section.displayName.toLowerCase();
-                                return sectionName.startsWith(searchTxt);
+                                return utilsService.containsWord(sectionName, searchTxt);
                             });
 
                             setFilteredSections(_filteredSections);

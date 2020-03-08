@@ -8,6 +8,7 @@ import usePages from './usePages';
 import PageList from '../../components/pagesList/pagesList';
 import pagesService from '../../services/pages.service';
 import useDb from '../../hooks/useDB';
+import utilsService from '../../services/utils.service';
 
 export default withAuth((props: any) => {
     const [pages, pagesLoading] = usePages();
@@ -51,7 +52,8 @@ export default withAuth((props: any) => {
                         const pageTitle = page.title.toLowerCase();
                         const sectionName = page.sectionName.toLowerCase();
                         const sessions = page.sessions;
-                        return pageTitle.startsWith(searchTxt) || sectionName.startsWith(searchTxt) || sessions.find((section: any) => section.daysDiffFromToday === Number(searchTxt))
+                        
+                        return utilsService.containsWord(pageTitle, searchTxt) || utilsService.containsWord(sectionName, searchTxt) || sessions.find((section: any) => section.daysDiffFromToday === Number(searchTxt))
                     });
 
                     setFilteredPages(_filteredPages);
