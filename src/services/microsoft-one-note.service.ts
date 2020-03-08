@@ -5,7 +5,7 @@ import userService from './user.service';
 import utilsService from './utils.service';
 import clientStorage from "./client-side-data-storage.service";
 import errorHandlerService from "./error-handler.service";
-import routerService from './route.service';
+import routerService, {history} from './route.service';
 
 const axios = _axios.create({
     baseURL: 'https://graph.microsoft.com/v1.0/me/onenote',
@@ -77,7 +77,7 @@ class MicrosoftOneNoteApi {
     onToken(tokenResponse: any){
         this.setBearerToken(tokenResponse.accessToken);
         this.setUserDetails(userService.userDetails);
-        window.location.href = routerService.getRouteUrl('notebooks');
+        history.push(routerService.getRouteUrl('notebooks'));
     }
 
     acquireTokenPopup() {

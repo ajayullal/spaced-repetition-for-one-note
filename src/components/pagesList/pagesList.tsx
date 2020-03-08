@@ -33,7 +33,10 @@ export default ({ viewPageInfo, filteredPages, keyProp }: any) => {
                                     item.links ? <VisibilityIcon onClick={
                                         (event) => {
                                             event.stopPropagation();
-                                            routerService.gotoUrl(item.links?.oneNoteClientUrl?.href);
+                                            const link = item.links?.oneNoteClientUrl?.href;
+                                            if(link){
+                                                window.location.href = link;
+                                            }
                                         }
                                     } style={{
                                         float: 'right'

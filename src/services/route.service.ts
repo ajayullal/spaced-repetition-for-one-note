@@ -1,6 +1,8 @@
 import utilsService from './utils.service';
 import {Book, MenuBook, Note, Timer} from '@material-ui/icons';
 import {serverBase} from './config';
+import { createHashHistory } from 'history'
+export const history = createHashHistory()
 
 export const routeConfig: { [key: string]: any }  = {
     notebooks: {
@@ -66,7 +68,7 @@ class RouteService{
     }
 
     gotoUrl(url: string){
-        window.location.href = url;
+        history.push(url.replace(`${serverBase}/#`, ''));
     }
 
     goTo(name: string, params: {} = {}){
