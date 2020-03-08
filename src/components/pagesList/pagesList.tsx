@@ -1,8 +1,10 @@
 import React from "react";
 import { Typography } from "@material-ui/core";
 import CardList from "../card-list/CardList";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import { routerService } from "../../services";
 
-export default ({viewPageInfo, filteredPages, keyProp}: any) => {
+export default ({ viewPageInfo, filteredPages, keyProp }: any) => {
     return (
         <>
             <CardList
@@ -22,10 +24,21 @@ export default ({viewPageInfo, filteredPages, keyProp}: any) => {
 
                             <Typography color="textSecondary" gutterBottom>
                                 Last revisited:
-                     
+
                                 {item.sessions?.length > 0 ? item.sessions.map(({ daysDiffFromToday, startDate, startTime }: any, index: number) => {
-                                    return (<span key={`${startDate}*${startTime}`}> {daysDiffFromToday}{index !== item.sessions.length - 1 ? ', ' : ` day${daysDiffFromToday>1? 's': ''} ago`}</span>)
+                                    return (<span key={`${startDate}*${startTime}`}> {daysDiffFromToday}{index !== item.sessions.length - 1 ? ', ' : ` day${daysDiffFromToday > 1 ? 's' : ''} ago`}</span>)
                                 }) : ' Never'}
+
+                                {
+                                    item.links ? <VisibilityIcon onClick={
+                                        (event) => {
+                                            event.stopPropagation();
+                                            routerService.gotoUrl(item.links?.oneNoteClientUrl?.href);
+                                        }
+                                    } style={{
+                                        float: 'right'
+                                    }}></VisibilityIcon> : null
+                                }
                             </Typography>
                         </div>
                     );
