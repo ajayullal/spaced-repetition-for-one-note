@@ -16,11 +16,14 @@ const axios = _axios.create({
 
 axios.interceptors.response.use(response => response.data, error => Promise.reject(error));
 
+const dbPageId = '0-f2f6afa638c1864cb26399b2a7cef5f7!1-E6AC34B29128DCBF!2176';
+
 const apiEndPoints = {
     notebooks: '/notebooks',
     sections: '/notebooks/:id/sections',
-    pages: '/sections/:id/pages?top=100',
-    content: '/pages/0-f2f6afa638c1864cb26399b2a7cef5f7!1-E6AC34B29128DCBF!2176/content'
+    sectionPages: '/sections/:id/pages?top=100',
+    content: `/pages/${dbPageId}/content`,
+    pages: '/pages'
 };
 
 class MicrosoftOneNoteApi {
@@ -41,7 +44,7 @@ class MicrosoftOneNoteApi {
 
     //, "Notes.ReadWrite.All", "Notes.ReadWrite", "Notes.Read", "Notes.Create"
     requestObj = {
-        scopes: ["Notes.Read.All"]
+        scopes: ["Notes.Read.All", "offline_access"]
     };
 
     constructor() {
@@ -62,6 +65,15 @@ class MicrosoftOneNoteApi {
         }
     }
 
+    checkTokenExpiryAndRenew(expiresOn: Date){
+        const renewTokenAfterMs = (expiresOn.getTime() - Date.now()) - (1000 * 60 * 10);
+        console.log("Setting token renewal timeout...");
+        setTimeout(() => {
+            console.log("Renewing token...");
+            this.acquireTokenPopup();
+        }, renewTokenAfterMs);
+    }
+
     onToken(tokenResponse: any){
         this.setBearerToken(tokenResponse.accessToken);
         this.setUserDetails(userService.userDetails);
@@ -71,10 +83,12 @@ class MicrosoftOneNoteApi {
     acquireTokenPopup() {
         //Always start with acquireTokenSilent to obtain a token in the signed in user from cache
         this.myMSALObj.acquireTokenSilent(this.requestObj).then((tokenResponse: any) => {
-            this.onToken(tokenResponse)
+            this.checkTokenExpiryAndRenew(tokenResponse.expiresOn);
+            this.onToken(tokenResponse);
         }).catch((error: any) => {
             alert(error);
             this.myMSALObj.acquireTokenPopup(this.requestObj).then((tokenResponse: any) => {
+                this.checkTokenExpiryAndRenew(tokenResponse.expiresOn);
                 this.onToken(tokenResponse)
             }).catch((error: any) => {
                 alert(error);
@@ -121,8 +135,14 @@ class MicrosoftOneNoteApi {
         return axios.get(utilsService.replaceParamsInUrl(apiEndPoints.sections, { id: notebookId })).then(this.returnValue).catch(errorHandlerService.handleError);
     }
 
-    getAllPages(sectionId: string) {
-        return axios.get(utilsService.replaceParamsInUrl(apiEndPoints.pages, { id: sectionId })).then(response => {
+    getAllPages(){
+        return axios.get(apiEndPoints.pages).then((response: any) => {
+            return response.value.filter((page: any) => page.id !== dbPageId && page.parentSection.displayName !== "Work");
+        }).catch(errorHandlerService.handleError);
+    }
+
+    getSectionPages(sectionId: string) {
+        return axios.get(utilsService.replaceParamsInUrl(apiEndPoints.sectionPages, { id: sectionId })).then(response => {
             const _response = this.returnValue(response);
             return _response.filter((page: any) => page.title);
         }).catch(errorHandlerService.handleError);
@@ -132,7 +152,7 @@ class MicrosoftOneNoteApi {
         return axios.get(selfUrl).catch(errorHandlerService.handleError);
     }
 
-    updateOneNotePage(sessionDetails: any) {
+    updateOneNoteDB(sessionDetails: any) {
         const rowProperties = ['startDate', 
                                'startTime', 
                                'title', 

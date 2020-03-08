@@ -10,6 +10,7 @@ import NavDrawer from '../nav-drawer';
 
 import BookIcon from '@material-ui/icons/Book';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
+import Pages from '@material-ui/icons/Pages';
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -61,15 +62,23 @@ export default withRouter(function Layout({ errorMessage, routeInfo, children, h
             routeService.gotoUrl(`#${notebooks.path}`);
           }} button>
             <ListItemIcon><BookIcon /></ListItemIcon>
-            <ListItemText primary="Notebooks" />
+            <ListItemText primary={routeService.getRouteInfo('notebooks').name} />
           </ListItem>
-
+          
           <ListItem onClick={() => {
              const recentlyRevisedPages = routeService.getRouteInfo('recentlyRevisedPages');
              routeService.gotoUrl(`#${recentlyRevisedPages.path}`);
           }} button>
             <ListItemIcon><WatchLaterIcon /></ListItemIcon>
-            <ListItemText primary="Recent repetitions" />
+            <ListItemText primary={routeService.getRouteInfo('recentlyRevisedPages').name} />
+          </ListItem>
+
+          <ListItem onClick={() => {
+             const recentlyCreatedPages = routeService.getRouteInfo('recentlyCreatedPages');
+             routeService.gotoUrl(`#${recentlyCreatedPages.path}`);
+          }} button>
+            <ListItemIcon><Pages /></ListItemIcon>
+            <ListItemText primary={routeService.getRouteInfo('recentlyCreatedPages').name} />
           </ListItem>
         </List>
       </NavDrawer>

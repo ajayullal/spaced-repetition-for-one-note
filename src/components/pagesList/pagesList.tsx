@@ -23,8 +23,8 @@ export default ({viewPageInfo, filteredPages, keyProp}: any) => {
                             <Typography color="textSecondary" gutterBottom>
                                 Last revisited:
                      
-                                {item.sessions.length > 0 ? item.sessions.map(({ daysDiffFromToday, startDate, startTime }: any, index: number) => {
-                                    return (<span key={`${startDate}*${startTime}`}> {daysDiffFromToday}{index !== item.sessions.length - 1 ? ', ' : ' days ago'}</span>)
+                                {item.sessions?.length > 0 ? item.sessions.map(({ daysDiffFromToday, startDate, startTime }: any, index: number) => {
+                                    return (<span key={`${startDate}*${startTime}`}> {daysDiffFromToday}{index !== item.sessions.length - 1 ? ', ' : ` day${daysDiffFromToday>1? 's': ''} ago`}</span>)
                                 }) : ' Never'}
                             </Typography>
                         </div>

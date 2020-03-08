@@ -30,7 +30,11 @@ export const routeConfig: { [key: string]: any }  = {
     },
     recentlyRevisedPages: {
         name: 'Recently Revised Pages',
-        path: '/recentlyRevisedPages'
+        path: '/recently-revised-pages'
+    },
+    recentlyCreatedPages: {
+        name: 'Recently Edited Pages',
+        path: '/recently-edited-pages'
     }
 };
 

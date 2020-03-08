@@ -64,8 +64,7 @@ export default ({ open, onClose, children }: INavDrawer) => {
                     ModalProps={{
                         keepMounted: true, // Better open performance on mobile.
                     }}
-                    onClose={onClose}
-                >
+                    onClose={onClose}>
                     {drawer}
                 </Drawer>
             </Hidden>
@@ -76,8 +75,7 @@ export default ({ open, onClose, children }: INavDrawer) => {
                         paper: classes.drawerPaper,
                     }}
                     variant="temporary"
-                    open={open}
-                >
+                    open={open}>
                     {drawer}
                 </Drawer>
             </Hidden>

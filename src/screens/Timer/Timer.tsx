@@ -137,7 +137,7 @@ export default (props: any) => {
     const rowDetails = getRowDetails(totalMillisSpeantLeaning, totalMillis);
 
     // Update one note page which tracks learning
-    mons.updateOneNotePage(rowDetails).then(() => {
+    mons.updateOneNoteDB(rowDetails).then(() => {
       setRows((rows: any) => [...rows, {...rowDetails, repetition: 'No'}]);
     });
 
@@ -243,7 +243,7 @@ export default (props: any) => {
       rowDetails.repetition = true;
         
       // Update one note page which tracks learning
-      mons.updateOneNotePage(rowDetails).then(() => {
+      mons.updateOneNoteDB(rowDetails).then(() => {
         setRows((rows: any) => [...rows, {...rowDetails, repetition: 'Yes'}]);
       });
     }
@@ -284,8 +284,8 @@ export default (props: any) => {
             valueLabelDisplay="auto"
             aria-label="pretto slider"
             min={1}
-            step={5}
-            max={120}
+            step={1}
+            max={90}
             defaultValue={sliderValueRef.current} /> :
             <LinearProgress
               variant="buffer"

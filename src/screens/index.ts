@@ -4,6 +4,7 @@ import Sections from './Sections/Sections';
 import Pages from './Pages/Pages';
 import Timer from './Timer/Timer';
 import RecentlyRevisedPages from './RecentlyRevisedPages/Pages';
+import RecentlyEditedPages from './RecentlyEditedPages/Pages';
 
 export default {
     Login,
@@ -11,5 +12,6 @@ export default {
     Sections,
     Pages,
     Timer,
-    RecentlyRevisedPages
+    RecentlyRevisedPages,
+    RecentlyEditedPages
 };
