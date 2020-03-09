@@ -59,7 +59,7 @@ export default withRouter(function Layout({ errorMessage, routeInfo, children, h
         <List>
           <ListItem onClick={() => {
             const notebooks = routeService.getRouteInfo('notebooks');
-            routeService.gotoUrl(`#${notebooks.path}`);
+            routeService.gotoUrl(`${notebooks.path}`);
           }} button>
             <ListItemIcon><BookIcon /></ListItemIcon>
             <ListItemText primary={routeService.getRouteInfo('notebooks').name} />
@@ -67,7 +67,7 @@ export default withRouter(function Layout({ errorMessage, routeInfo, children, h
           
           <ListItem onClick={() => {
              const recentlyRevisedPages = routeService.getRouteInfo('recentlyRevisedPages');
-             routeService.gotoUrl(`#${recentlyRevisedPages.path}`);
+             routeService.gotoUrl(`${recentlyRevisedPages.path}`);
           }} button>
             <ListItemIcon><WatchLaterIcon /></ListItemIcon>
             <ListItemText primary={routeService.getRouteInfo('recentlyRevisedPages').name} />
@@ -75,7 +75,7 @@ export default withRouter(function Layout({ errorMessage, routeInfo, children, h
 
           <ListItem onClick={() => {
              const recentlyCreatedPages = routeService.getRouteInfo('recentlyCreatedPages');
-             routeService.gotoUrl(`#${recentlyCreatedPages.path}`);
+             routeService.gotoUrl(`${recentlyCreatedPages.path}`);
           }} button>
             <ListItemIcon><Pages /></ListItemIcon>
             <ListItemText primary={routeService.getRouteInfo('recentlyCreatedPages').name} />
