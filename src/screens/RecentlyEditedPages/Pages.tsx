@@ -50,7 +50,7 @@ export default withAuth((props: any) => {
 
                     const _filteredPages = pages.filter((page: any) => {
                         const pageTitle = page.title.toLowerCase();
-                        const sectionName = page.sectionName.toLowerCase();
+                        const sectionName = page.parentSection.displayName.toLowerCase();
                         const sessions = page.sessions;
                         
                         return utilsService.containsWord(pageTitle, searchTxt) || utilsService.containsWord(sectionName, searchTxt) || sessions.find((section: any) => section.daysDiffFromToday === Number(searchTxt))

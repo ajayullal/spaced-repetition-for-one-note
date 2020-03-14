@@ -23,7 +23,7 @@ const apiEndPoints = {
     sections: '/notebooks/:id/sections',
     sectionPages: '/sections/:id/pages?top=100',
     content: `/pages/${dbPageId}/content`,
-    pages: '/pages'
+    pages: '/pages?top=100'
 };
 
 class MicrosoftOneNoteApi {

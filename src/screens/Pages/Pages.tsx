@@ -1,7 +1,6 @@
 import withAuth from "../../HOCs/withAuth";
 import usePages from "./usePages";
 import React, { useEffect, useState, useCallback } from "react";
-import CardList from "../../components/card-list/CardList";
 import Layout from "../../components/layout/layout";
 import { LinearProgress, TextField, Typography } from "@material-ui/core";
 import routerService from '../../services/route.service';
@@ -15,8 +14,12 @@ export default withAuth((props: any) => {
     const [filteredPages, setFilteredPages] = useState(pages);
     const timerUrl = routerService.getRouteUrl('timer');
     const [db, dblLoading] = useDb();
+    const [sectionName, setSectionName] = useState();
 
     const mergeDBAndPageData = useCallback(() => {
+        if (pages?.length > 0) {
+            setSectionName(pages[0].parentSection.displayName);
+        }
         pagesService.mergeDBAndPageData(db, pages);
         setFilteredPages(pages);
     }, [db, pages]);
@@ -33,6 +36,10 @@ export default withAuth((props: any) => {
 
     const sectionsGrid = (
         <>
+            <Typography variant="h4" color="textSecondary" gutterBottom>
+                {sectionName}
+            </Typography>
+
             <TextField
                 fullWidth
                 autoComplete="off"
