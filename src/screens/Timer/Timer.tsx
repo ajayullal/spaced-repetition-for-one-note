@@ -262,10 +262,6 @@ export default (props: any) => {
     </>
   );
 
-  const revisionModeHeader = (
-    <Typography variant="h5" component="h6" gutterBottom>{pageDetails.current && pageDetails.current.title}</Typography>
-  );
-
   const studyModeHeader = (
     !isTicking ?
       <Typography variant="h5" component="h6" gutterBottom>Study {pageDetails.current && `"${pageDetails.current.title}"`} for {sliderValue} Minutes</Typography> :
