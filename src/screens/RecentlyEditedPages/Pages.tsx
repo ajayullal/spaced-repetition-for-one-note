@@ -27,7 +27,6 @@ export default withAuth((props: any) => {
                 return page;
             });
 
-            pagesService.sortPages(_pages);
             setFilteredPages(_pages);
         }
     }, [pages, db]);

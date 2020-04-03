@@ -23,7 +23,7 @@ export const themeConfig = {
 
 export const apiConfig = {
     // serverBase: 'http://localhost:4006'
-    serverBase: 'https://www.onenote.com/api/v1.0/me/notes'
+    serverBase: 'https://graph.microsoft.com/v1.0/me/onenote'
 };
 
 export const appTexts = {

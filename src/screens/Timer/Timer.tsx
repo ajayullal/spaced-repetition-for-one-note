@@ -262,6 +262,10 @@ export default (props: any) => {
     </>
   );
 
+  const revisionModeHeader = (
+    <Typography variant="h5" component="h6" gutterBottom>{pageDetails.current && pageDetails.current.title}</Typography>
+  );
+
   const studyModeHeader = (
     !isTicking ?
       <Typography variant="h5" component="h6" gutterBottom>Study {pageDetails.current && `"${pageDetails.current.title}"`} for {sliderValue} Minutes</Typography> :
@@ -320,10 +324,6 @@ export default (props: any) => {
       }} variant="contained" color="primary">{revisionMode? 'Stop': 'Quit'}</Button>)
   );
 
-  const revisionModeHeader = (
-    <>{isTicking? <Typography className="revision-mode-header" variant="h5" component="h6" gutterBottom>{timeElapsedTxt}</Typography>: null}</>
-  );
-
   const onQuit = () => {
     if (revisionClicked.current || revisionMode) {
       checkAndSetRevisionMode();
@@ -344,9 +344,9 @@ export default (props: any) => {
         }} onQuit={onQuit} isRevision={revisionMode}></QuitDialog>
 
         {revisionSwitch}
-        {revisionMode ? null : studyModeHeader}
+        {revisionMode ? revisionModeHeader : studyModeHeader}
         {revisionMode ? null : studyModeSlider}
-        {timerButtons}{revisionMode? revisionModeHeader: null}
+        {timerButtons}
 
         <div className="table-cntr">
           <Typography variant="h5" component="h6" gutterBottom>
