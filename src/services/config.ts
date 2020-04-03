@@ -1,8 +1,8 @@
 import * as Msal from 'msal';
 import {routeConfig as r} from './route.service';
 
-// export const serverBase = 'http://localhost:3000';
-export const serverBase = 'https://ajayullal.github.io/one-note-spaced-repetition';
+export const serverBase = 'http://localhost:3000';
+// export const serverBase = 'https://ajayullal.github.io/one-note-spaced-repetition';
 
 export const msalConfig: Msal.Configuration = {
     auth: {
@@ -23,7 +23,7 @@ export const themeConfig = {
 
 export const apiConfig = {
     // serverBase: 'http://localhost:4006'
-    serverBase: 'https://www.onenote.com/api/v1.0/me/notes'
+    serverBase: 'https://graph.microsoft.com/v1.0/me/onenote'
 };
 
 export const appTexts = {

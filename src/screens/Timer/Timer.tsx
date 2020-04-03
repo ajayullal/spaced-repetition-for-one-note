@@ -28,7 +28,7 @@ export default (props: any) => {
   const [loading, setLoading] = useState(true);
   const [totalMinutes, setTotalMinutes] = useState();
   const [revisionMode, setRevisionMode] = useState(false);
-  const [timeElapsedTxt, setTimeElapsedTxt] = useState(''); 
+  const [timeElapsedTxt, setTimeElapsedTxt] = useState('');
 
   const startMillis = useRef(new Date());
   const sliderValueRef = useRef(30);
@@ -138,7 +138,7 @@ export default (props: any) => {
 
     // Update one note page which tracks learning
     mons.updateOneNoteDB(rowDetails).then(() => {
-      setRows((rows: any) => [...rows, {...rowDetails, repetition: 'No'}]);
+      setRows((rows: any) => [...rows, { ...rowDetails, repetition: 'No' }]);
     });
 
     clearInterval(counterIntervalRef.current);
@@ -212,7 +212,7 @@ export default (props: any) => {
   };
 
   const getRevisionTime = () => {
-    const seconds = Math.trunc((Date.now() - startMillis.current.getTime())/1000);
+    const seconds = Math.trunc((Date.now() - startMillis.current.getTime()) / 1000);
     const minutes = Math.trunc(seconds / 60);
     return {
       minutes,
@@ -222,7 +222,7 @@ export default (props: any) => {
 
   const getTimeElapsedTxt = () => {
     const time = getRevisionTime();
-    return `Time Elapsed - ${time.minutes > 0? time.minutes+" minutes and ": ''}${time.seconds % 60} seconds`;
+    return `Time Elapsed - ${time.minutes > 0 ? time.minutes + " minutes and " : ''}${time.seconds % 60} seconds`;
   };
 
   const checkAndSetRevisionMode = () => {
@@ -231,20 +231,20 @@ export default (props: any) => {
       revisionClicked.current = false;
       setRevisionMode(true);
 
-      if(isTicking){
+      if (isTicking) {
         stopTimer();
       }
-    }else{
+    } else {
       // Revision Ended
       clearInterval(counterIntervalRef.current);
       const revisionTime = getRevisionTime();
       const totalMillisSpeantLeaning = ((revisionTime.minutes * 60) + revisionTime.seconds) * 1000;
       const rowDetails = getRowDetails(totalMillisSpeantLeaning, totalMillisSpeantLeaning);
       rowDetails.repetition = true;
-        
+
       // Update one note page which tracks learning
       mons.updateOneNoteDB(rowDetails).then(() => {
-        setRows((rows: any) => [...rows, {...rowDetails, repetition: 'Yes'}]);
+        setRows((rows: any) => [...rows, { ...rowDetails, repetition: 'Yes' }]);
       });
     }
   };
@@ -300,13 +300,13 @@ export default (props: any) => {
   ), [isTicking, rows, timeLeftPercent]);
 
   const checkAndStartTimer = () => {
-    if(revisionMode){
+    if (revisionMode) {
       startMillis.current = new Date();
-  
+
       counterIntervalRef.current = setInterval(() => {
         setTimeElapsedTxt(getTimeElapsedTxt());
       }, 1000);
-    }else{
+    } else {
       startTimer();
     }
     setTicking(true);
@@ -314,26 +314,29 @@ export default (props: any) => {
 
   const timerButtons = (
     !isTicking ?
-      (<Button onClick={() => {checkAndStartTimer()}} variant="contained" color="primary">Start</Button>) :
+      (<Button onClick={() => { checkAndStartTimer() }} variant="contained" color="primary">Start</Button>) :
       (<Button onClick={() => {
         setQuitDialog(true)
-      }} variant="contained" color="primary">{revisionMode? 'Stop': 'Quit'}</Button>)
+      }} variant="contained" color="primary">{revisionMode ? 'Stop' : 'Quit'}</Button>)
   );
 
   const revisionModeHeader = (
-    <>{isTicking? <Typography className="revision-mode-header" variant="h5" component="h6" gutterBottom>{timeElapsedTxt}</Typography>: null}</>
+    <>
+      <Typography className="revision-mode-header" variant="h5" component="h6" gutterBottom>
+        {pageDetails.current && pageDetails.current.title}{isTicking? `, ${timeElapsedTxt}`: null}</Typography>
+    </>
   );
 
   const onQuit = () => {
     if (revisionClicked.current || revisionMode) {
       checkAndSetRevisionMode();
-    }else{
+    } else {
       stopTimer();
     }
     setQuitDialog(false);
     setTicking(false);
   };
-  
+
   return (
     <>
       <Layout hideNavDrawer={true} routeInfo={routerService.getRouteInfo('timer')}>
@@ -346,7 +349,8 @@ export default (props: any) => {
         {revisionSwitch}
         {revisionMode ? null : studyModeHeader}
         {revisionMode ? null : studyModeSlider}
-        {timerButtons}{revisionMode? revisionModeHeader: null}
+        {revisionMode ? revisionModeHeader : null}
+        {timerButtons}
 
         <div className="table-cntr">
           <Typography variant="h5" component="h6" gutterBottom>
