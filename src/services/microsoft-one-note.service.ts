@@ -44,7 +44,7 @@ class MicrosoftOneNoteApi {
 
     //, "Notes.ReadWrite.All", "Notes.ReadWrite", "Notes.Read", "Notes.Create"
     requestObj = {
-        scopes: ["Notes.Read.All", "offline_access"]
+        scopes: ["Notes.Read.All"]
     };
 
     constructor() {
@@ -66,7 +66,8 @@ class MicrosoftOneNoteApi {
     }
 
     checkTokenExpiryAndRenew(expiresOn: Date){
-        const renewTokenAfterMs = (expiresOn.getTime() - Date.now()) - (1000 * 60 * 10);
+        // Refresh every 20 minutes
+        const renewTokenAfterMs = 20 * (1000 * 60);
         console.log("Setting token renewal timeout...");
         setTimeout(() => {
             console.log("Renewing token...");
