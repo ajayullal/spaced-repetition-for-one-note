@@ -1,7 +1,7 @@
 import * as Msal from 'msal';
 import {routeConfig as r} from './route.service';
 
-// export const serverBase = 'http://localhost:3000';
+//export const serverBase = 'http://localhost:3000';
 export const serverBase = 'https://ajayullal.github.io/one-note-spaced-repetition';
 
 export const msalConfig: Msal.Configuration = {

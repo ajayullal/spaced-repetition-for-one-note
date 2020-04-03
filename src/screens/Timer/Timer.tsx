@@ -347,7 +347,7 @@ export default (props: any) => {
         }} onQuit={onQuit} isRevision={revisionMode}></QuitDialog>
 
         {revisionSwitch}
-        {revisionMode ? revisionModeHeader : studyModeHeader}
+        {!revisionMode ? studyModeHeader : null}
         {revisionMode ? null : studyModeSlider}
         {revisionMode ? revisionModeHeader : null}
         {timerButtons}
