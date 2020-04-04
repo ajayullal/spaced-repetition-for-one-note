@@ -68,29 +68,30 @@ class MicrosoftOneNoteApi {
     checkTokenExpiryAndRenew(expiresOn: Date){
         // Refresh every 20 minutes
         const renewTokenAfterMs = 20 * (1000 * 60);
-        console.log("Setting token renewal timeout...");
         setTimeout(() => {
-            console.log("Renewing token...");
-            this.acquireTokenPopup();
+            this.acquireTokenPopup(true);
         }, renewTokenAfterMs);
     }
 
-    onToken(tokenResponse: any){
+    onToken(tokenResponse: any, isRenewal: boolean){
         this.setBearerToken(tokenResponse.accessToken);
         this.setUserDetails(userService.userDetails);
-        history.push(routerService.getRouteUrl('notebooks'));
+
+        if(!isRenewal){
+            history.push(routerService.getRouteUrl('notebooks'));
+        }
     }
 
-    acquireTokenPopup() {
+    acquireTokenPopup(isRenewal = false) {
         //Always start with acquireTokenSilent to obtain a token in the signed in user from cache
         this.myMSALObj.acquireTokenSilent(this.requestObj).then((tokenResponse: any) => {
             this.checkTokenExpiryAndRenew(tokenResponse.expiresOn);
-            this.onToken(tokenResponse);
+            this.onToken(tokenResponse, isRenewal);
         }).catch((error: any) => {
             alert(error);
             this.myMSALObj.acquireTokenPopup(this.requestObj).then((tokenResponse: any) => {
                 this.checkTokenExpiryAndRenew(tokenResponse.expiresOn);
-                this.onToken(tokenResponse)
+                this.onToken(tokenResponse, isRenewal)
             }).catch((error: any) => {
                 alert(error);
             });
