@@ -6,8 +6,6 @@ import { routeConfig } from './services/config';
 import './shared/global.scss';
 
 const App: React.FC = () => {
-  document.title = "Spaced repetition for one note";
-
   return (
     <HashRouter>
       <Switch>
