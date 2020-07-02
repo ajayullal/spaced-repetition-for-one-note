@@ -1,0 +1,25 @@
+.taskInput{
+    margin-top: 20px !important;
+}
+
+.selectBoxCntr{
+    display: flex;
+
+    .selectBoxGrid{
+        float: left;
+
+        &:first-child{
+            padding-right: 10px;
+        }
+
+
+        &:not(:first-child){
+            padding-left: 10px;
+        }
+    }
+        
+    .selectBox{
+        width: 100%;
+    }
+}
+

@@ -2,7 +2,6 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import CardList from "../card-list/CardList";
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import { routerService } from "../../services";
 
 export default ({ viewPageInfo, filteredPages, keyProp }: any) => {
     return (

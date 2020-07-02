@@ -16,6 +16,8 @@ const App: React.FC = () => {
         <Route path={routeConfig.timer.path} exact component={Screens.Timer} />
         <Route path={routeConfig.recentlyRevisedPages.path} exact component={Screens.RecentlyRevisedPages} />
         <Route path={routeConfig.recentlyCreatedPages.path} exact component={Screens.RecentlyEditedPages} />
+        <Route path={routeConfig.stats.path} exact component={Screens.Stats} />
+        <Route path={routeConfig.customTimer.path} exact component={Screens.CustomTimer} />
         <Route path='/auth' exact component={Screens.Timer} />
         <Redirect to={routeConfig.notebooks.path} />
       </Switch>

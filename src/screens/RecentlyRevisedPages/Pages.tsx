@@ -16,7 +16,7 @@ export default withAuth((props: any) => {
     useEffect(() => {
         if (db && db.length > 0 && !db[0].sessions) {
             const pageSessions = pagesService.getSessionsFromDB(db);
-
+   
             const pages = Object.entries(pageSessions).map(([, sessions]: any) => {
                 return {
                     ...sessions[0],
@@ -31,8 +31,8 @@ export default withAuth((props: any) => {
         }
     }, [db, setDb]);
 
-    const viewPageInfo = () => {
-
+    const viewPageInfo = (page: any) => {
+        routerService.viewPageInfo(page);
     };
 
     const allPages = (
@@ -59,7 +59,7 @@ export default withAuth((props: any) => {
             />
             
 
-            <PageList keyProp='pageId' viewPageInfo={viewPageInfo} filteredPages={filteredPages}></PageList>
+            <PageList viewPageInfo={viewPageInfo} keyProp='pageId' filteredPages={filteredPages}></PageList>
         </>
     );
 

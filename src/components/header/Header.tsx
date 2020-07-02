@@ -1,7 +1,7 @@
 import React from 'react';
 import './header.scss';
 import { AppBar, Toolbar, IconButton, Typography, makeStyles, createStyles, Theme } from '@material-ui/core';
-import { AccountCircle } from '@material-ui/icons';
+import { ExitToApp } from '@material-ui/icons';
 import IHeader from "./IHeader";
 import { themeConfig } from '../../services/config';
 import { userService, routerService } from '../../services';
@@ -48,8 +48,10 @@ export default ({ pageName, hideNavDrawer = false, history, toggleNavDrawer }: I
 
     const userDetails = (<div className="account-details">
         <span className="user-name">{userService.userDetails?.account.name}</span>
-        <AccountCircle />
-        <span onClick={logout} className="logout">Logout</span>
+        <ExitToApp onClick={logout} className="cursor-pointer" />
+        <Typography onClick={logout} className="logout" gutterBottom>
+            Logout
+        </Typography>
     </div>);
 
     const menuIcon = (
@@ -70,10 +72,10 @@ export default ({ pageName, hideNavDrawer = false, history, toggleNavDrawer }: I
                     <Typography variant="h6" noWrap>
                         <>
                             {
-                                !isLoginPage ? menuIcon: ''
+                                !isLoginPage ? menuIcon : ''
                             }
 
-                            <span style={{ marginLeft: isLoginPage? '23px': '', position: 'relative', top: '2px' }}>{pageName}</span>
+                            <span style={{ marginLeft: isLoginPage ? '23px' : '', position: 'relative', top: '2px' }}>{pageName}</span>
                         </>
                     </Typography>
 

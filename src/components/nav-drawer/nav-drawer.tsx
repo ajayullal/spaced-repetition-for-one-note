@@ -1,7 +1,7 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Hidden, Typography } from '@material-ui/core';
+import { Drawer, Divider, Hidden, Typography } from '@material-ui/core';
 import { createStyles, Theme, makeStyles, useTheme } from '@material-ui/core/styles';
-import { themeConfig, appTexts } from '../../services/config';
+import { themeConfig } from '../../services/config';
 import INavDrawer from './INavDrawer';
 import logo from '../../logo.svg';
 import './nav-drawer.scss';
@@ -25,15 +25,6 @@ export default ({ open, onClose, children }: INavDrawer) => {
     const classes = useStyles();
     const theme = useTheme();
 
-    // const noteBookList: any = (<List>
-    //     {noteBooks.map((text, index) => (
-    //         <ListItem button key={text}>
-    //             <ListItemIcon><BookIcon /></ListItemIcon>
-    //             <ListItemText primary={text} />
-    //         </ListItem>
-    //     ))}
-    // </List>);
-
     const drawer = (
         <div>
             <div className="logo-container">
@@ -47,7 +38,7 @@ export default ({ open, onClose, children }: INavDrawer) => {
             <Divider />
 
             {children}
-        </div >
+        </div>
     );
 
     return (

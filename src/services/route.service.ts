@@ -37,6 +37,14 @@ export const routeConfig: { [key: string]: any }  = {
     recentlyCreatedPages: {
         name: 'Recently Edited Pages',
         path: '/recently-edited-pages'
+    },
+    stats: {
+        name: 'Stats',
+        path: '/stats'
+    },
+    customTimer: {
+        name: 'Timer',
+        path: '/custom-timer'
     }
 };
 
@@ -74,6 +82,17 @@ class RouteService{
     goTo(name: string, params: {} = {}){
         const url = this.getRouteUrl(name, params);
         this.gotoUrl(url);
+    }
+
+    viewPageInfo(info: any){
+        let  timerUrl = this.getRouteUrl('timer');
+        
+        if(info.self){
+            this.gotoUrl(`${timerUrl}?pageUrl=${encodeURIComponent(info.self)}`);
+        }else if(info.sectionId && info.sectionName && info.title){
+            let search = `?pageTitle=${encodeURIComponent(info.title)}&sectionId=${info.sectionId}&sectionName=${info.sectionName}`;
+            this.gotoUrl(`${timerUrl}${search}`);
+        }
     }
 
     static getInstance(){

@@ -12,7 +12,6 @@ import utilsService from "../../services/utils.service";
 export default withAuth((props: any) => {
     const [pages, loading]: any[] = usePages(props.match.params.id);
     const [filteredPages, setFilteredPages] = useState(pages);
-    const timerUrl = routerService.getRouteUrl('timer');
     const [db, dblLoading] = useDb();
     const [sectionName, setSectionName] = useState();
 
@@ -31,7 +30,7 @@ export default withAuth((props: any) => {
     }, [db, mergeDBAndPageData, pages]);
 
     function viewPageInfo(page: any) {
-        routerService.gotoUrl(`${timerUrl}?pageUrl=${encodeURIComponent(page.self)}`);
+        routerService.viewPageInfo(page);
     }
 
     const sectionsGrid = (

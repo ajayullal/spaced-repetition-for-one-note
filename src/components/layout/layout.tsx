@@ -9,6 +9,8 @@ import ErrorAlert from '../error-alert/ErrorAlert';
 import NavDrawer from '../nav-drawer';
 
 import BookIcon from '@material-ui/icons/Book';
+import AddAlarmIcon from '@material-ui/icons/AddAlarm';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
 import Pages from '@material-ui/icons/Pages';
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
@@ -74,11 +76,19 @@ export default withRouter(function Layout({ errorMessage, routeInfo, children, h
           </ListItem>
 
           <ListItem onClick={() => {
-             const recentlyCreatedPages = routeService.getRouteInfo('recentlyCreatedPages');
-             routeService.gotoUrl(`${recentlyCreatedPages.path}`);
+             const stats = routeService.getRouteInfo('stats');
+             routeService.gotoUrl(`${stats.path}`);
           }} button>
-            <ListItemIcon><Pages /></ListItemIcon>
-            <ListItemText primary={routeService.getRouteInfo('recentlyCreatedPages').name} />
+            <ListItemIcon><TimelineIcon /></ListItemIcon>
+            <ListItemText primary={routeService.getRouteInfo('stats').name} />
+          </ListItem>
+
+          <ListItem onClick={() => {
+             const customTimer = routeService.getRouteInfo('customTimer');
+             routeService.gotoUrl(`${customTimer.path}`);
+          }} button>
+            <ListItemIcon><AddAlarmIcon /></ListItemIcon>
+            <ListItemText primary={routeService.getRouteInfo('customTimer').name} />
           </ListItem>
         </List>
       </NavDrawer>
