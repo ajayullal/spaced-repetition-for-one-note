@@ -25,11 +25,12 @@
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
+    "rimraf": "^3.0.2",
     "typescript": "^3.7.5"
   },
   "scripts": {
     "start": "concurrently 'react-scripts start'",
-    "build": "react-scripts build",
+    "buildAndDeploy": "react-scripts build && node buildAndDeploy.js cd ../one-note-spaced-repetition && git add . && git commit -a -m 'CP' && git push",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
