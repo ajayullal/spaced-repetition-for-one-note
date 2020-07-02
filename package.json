@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "concurrently 'react-scripts start'",
-    "bd": "react-scripts build && node buildAndDeploy.js cd ../one-note-spaced-repetition && git add . && git commit -a -m 'CP' && git push",
+    "bd": "react-scripts build && node buildAndDeploy.js && cd ../one-note-spaced-repetition && git add . && git commit -a -m 'CP' && git push",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
