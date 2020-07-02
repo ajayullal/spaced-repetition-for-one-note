@@ -14,6 +14,10 @@ class UtilsService{
         return url;
     }
 
+    round(number: number | string, precision = 2){
+        return Number(Number(number).toFixed(2));
+    }
+
     containsWord(srcStr: string, searchStr: string){
         searchStr = searchStr.toLowerCase().trim();
         srcStr = srcStr.toLowerCase().trim();

@@ -205,8 +205,8 @@ export default (props: any) => {
                   <TableCell align="center">{index + 1}</TableCell>
                   <TableCell align="center">{row.startDate}</TableCell>
                   <TableCell align="center">{row.startTime}</TableCell>
-                  <TableCell align="center">{row.minutesSpentLearning}</TableCell>
-                  <TableCell align="center">{row.totalSessionMinutes}</TableCell>
+                  <TableCell align="center">{utilsService.round(row.minutesSpentLearning)}</TableCell>
+                  <TableCell align="center">{utilsService.round(row.totalSessionMinutes)}</TableCell>
                   <TableCell align="center">{row.repetition}</TableCell>
                 </TableRow>
               ))}

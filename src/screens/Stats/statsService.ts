@@ -1,3 +1,5 @@
+import utilsService from '../../services/utils.service';
+
 class StatsService{
     static _instance: StatsService;
 
@@ -7,10 +9,10 @@ class StatsService{
         db.forEach((row: any) => {
             const startDate = this.formatDate(row.startDate);
             dbDateMap[startDate] = dbDateMap[startDate] || {totalTimeSpent: 0, date: startDate, pages: []};
-            row.totalSessionMinutes = this.round(row.totalSessionMinutes);
-            row.totalSessionHours = this.round(row.totalSessionMinutes / 60);
+            row.totalSessionMinutes = utilsService.round(row.totalSessionMinutes);
+            row.totalSessionHours = utilsService.round(row.totalSessionMinutes / 60);
             dbDateMap[startDate].totalTimeSpent += row.totalSessionMinutes;
-            dbDateMap[startDate].totalTimeSpentHours = this.round(dbDateMap[startDate].totalTimeSpent/ 60);
+            dbDateMap[startDate].totalTimeSpentHours = utilsService.round(dbDateMap[startDate].totalTimeSpent/ 60);
             dbDateMap[startDate].pages.push(row);
         });
 
@@ -26,9 +28,7 @@ class StatsService{
         return dtArr.join('/');
     }
 
-    round(number: number | string, precision = 2){
-        return Number(Number(number).toFixed(2));
-    }
+  
 
     static getInstance(){
         if(!StatsService._instance){
