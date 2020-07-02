@@ -9,6 +9,7 @@ export default () => {
         <>
             <Layout hideNavDrawer={true} routeInfo={routerService.getRouteInfo('customTimer')}>
                 <>
+                    <h1>Hello World</h1>
                     <TaskNameInput></TaskNameInput>
                 </>
             </Layout>
