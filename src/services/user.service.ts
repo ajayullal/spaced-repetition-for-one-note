@@ -26,11 +26,11 @@ class UserService {
     }
 
     isLoggedIn(): Boolean {
-        return Boolean(clientStorage.getItemSync('token'));
+        return Boolean(clientStorage.getItemSync('tokenResponse'));
     }
 
     logout(){
-        return Boolean(clientStorage.removeItemSync('token'));
+        return Boolean(clientStorage.removeItemSync('tokenResponse'));
     }
 
     static getInstance() {

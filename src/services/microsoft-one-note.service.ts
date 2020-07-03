@@ -44,7 +44,8 @@ class MicrosoftOneNoteApi {
 
     //, "Notes.ReadWrite.All", "Notes.ReadWrite", "Notes.Read", "Notes.Create"
     requestObj = {
-        scopes: ["Notes.Read.All"]
+        scopes: ["Notes.Read.All"],
+        loginHint: null
     };
 
     constructor() {
@@ -66,22 +67,8 @@ class MicrosoftOneNoteApi {
     }
 
     checkTokenExpiryAndRenew() {
-        const tokenResponse = userService.getToken();
-        const expiresOn = (new Date(tokenResponse.expiresOn)).getTime();
-        // Refresh every 20 minutes
-        const minutems = (1000 * 60);
-        let renewTokenAfterMs = 20 * minutems;
-
-        if (expiresOn) {
-            const currentTimeStamp = Date.now();
-            const msToExpiry = expiresOn - currentTimeStamp;
-            renewTokenAfterMs = msToExpiry - (5 * minutems);
-            renewTokenAfterMs = renewTokenAfterMs > 0 ? renewTokenAfterMs : 0;
-        }
-
-        setTimeout(() => {
-            this.acquireTokenPopup(true);
-        }, renewTokenAfterMs);
+        // Refresh every 1 minute
+        setTimeout(this.acquireTokenPopup.bind(this, true), (1000 * 60));
     }
 
     onToken(tokenResponse: any, isRenewal: boolean) {
@@ -96,6 +83,14 @@ class MicrosoftOneNoteApi {
 
     acquireTokenPopup(isRenewal = false) {
         //Always start with acquireTokenSilent to obtain a token in the signed in user from cache
+        //loginHint: this.userName 
+        let tokenResponse: any = clientStorage.getItemSync('tokenResponse');
+
+        if (tokenResponse) {
+            tokenResponse = JSON.parse(tokenResponse);
+            this.requestObj.loginHint = tokenResponse.idToken.preferredName;
+        }
+        
         this.myMSALObj.acquireTokenSilent(this.requestObj).then((tokenResponse: any) => {
             this.onToken(tokenResponse, isRenewal);
             this.checkTokenExpiryAndRenew();
