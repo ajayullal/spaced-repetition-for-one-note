@@ -7,10 +7,11 @@ export const StatsContext: any = React.createContext({});
 
 export default (props: any) => {
     const [db, dbLoading] = useDb();
-    const value = db && statsService.formatData(db);
+    const rows = db && statsService.formatData(db);
+    const stats = db && statsService.getTotalAndAverageTime(rows)
 
     return (
-        <StatsContext.Provider value={value}>
+        <StatsContext.Provider value={{rows, stats}}>
             {
                 dbLoading ? (<LinearProgress color="secondary" />) : props.children
             }

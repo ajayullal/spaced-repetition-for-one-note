@@ -19,6 +19,12 @@ class StatsService{
        return Object.keys(dbDateMap).map(date => dbDateMap[date]).reverse();
     }
 
+    getTotalAndAverageTime(rows: any){
+        const totalTime = utilsService.round(rows.reduce((sum: any, row: any) => row.totalTimeSpentHours + sum, 0));
+        const averageTime = utilsService.round(totalTime/rows.length);
+        return {totalTime, averageTime};
+    }
+
     formatDate(date: string){
         //  date is assumed to be in mm/dd/yyyy format
         const dtArr = date.split('/');

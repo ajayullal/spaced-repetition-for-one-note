@@ -3,7 +3,7 @@ import Layout from '../../components/layout/layout';
 import { routerService } from '../../services';
 import StatsProvider from './statsProvider';
 import { StatsContext } from './statsProvider';
-import { TableContainer, Table, makeStyles, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { TableContainer, Table, makeStyles, TableHead, TableRow, TableCell, TableBody, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Charts from './Charts';
 
@@ -16,10 +16,12 @@ const TableComponent = () => {
 
     const classes = useStyles();
 
-    const rows: any = useContext(StatsContext);
+    const {rows, stats}: any = useContext(StatsContext);
 
     return (
         <>
+            <Typography variant="h5" component="h5"  gutterBottom>Total time: {stats.totalTime} hours, Average time: {stats.averageTime} hours per day</Typography>
+            
             <TableContainer component={Paper}>
                 <Table className={classes.table} aria-label="simple table">
                     <TableHead>
