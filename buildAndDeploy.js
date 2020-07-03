@@ -15,7 +15,7 @@ const indexHTML = `${buildFolderPath}/index.html`;
 readFile(indexHTML, 'UTF-8')
     .then(fileContent => {
         let html = fileContent.replace(/="\//g, `="./`);
-        html = html.replace('React App', '"Spaced repetition for one note"');
+        html = html.replace('React App', 'Spaced repetition for one note');
         writeFile(indexHTML, html)
     })
     .catch(error => console.log("Error modifying index.html"));
