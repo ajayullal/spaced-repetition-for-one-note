@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import mons from '../services/microsoft-one-note.service';
 
 export default () => {
-    const [db, setDb] = useState();
+    const [db, setDb]: [any, any] = useState();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

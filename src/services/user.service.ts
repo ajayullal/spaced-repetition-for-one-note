@@ -20,6 +20,11 @@ class UserService {
         return this._userDetails;
     }
 
+    getToken(){
+        const tokenResponse = clientStorage.getItemSync('tokenResponse');
+        return tokenResponse? JSON.parse(tokenResponse): null;
+    }
+
     isLoggedIn(): Boolean {
         return Boolean(clientStorage.getItemSync('token'));
     }

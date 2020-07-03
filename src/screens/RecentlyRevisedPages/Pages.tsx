@@ -14,7 +14,7 @@ export default withAuth((props: any) => {
     const [filteredPages, setFilteredPages]: [any, any] = useState([]);
 
     useEffect(() => {
-        if (db && db.length > 0 && !db[0].sessions) {
+        if (db?.length > 0 && !db[0].sessions) {
             const pageSessions = pagesService.getSessionsFromDB(db);
    
             const pages = Object.entries(pageSessions).map(([, sessions]: any) => {

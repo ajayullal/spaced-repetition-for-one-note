@@ -5,7 +5,7 @@ import userService from './user.service';
 import utilsService from './utils.service';
 import clientStorage from "./client-side-data-storage.service";
 import errorHandlerService from "./error-handler.service";
-import routerService, {history} from './route.service';
+import routerService, { history } from './route.service';
 
 const axios = _axios.create({
     baseURL: 'https://graph.microsoft.com/v1.0/me/onenote',
@@ -65,19 +65,31 @@ class MicrosoftOneNoteApi {
         }
     }
 
-    checkTokenExpiryAndRenew(expiresOn: Date){
+    checkTokenExpiryAndRenew() {
+        const tokenResponse = userService.getToken();
+        const expiresOn = (new Date(tokenResponse.expiresOn)).getTime();
         // Refresh every 20 minutes
-        const renewTokenAfterMs = 20 * (1000 * 60);
+        const minutems = (1000 * 60);
+        let renewTokenAfterMs = 20 * minutems;
+
+        if (expiresOn) {
+            const currentTimeStamp = Date.now();
+            const msToExpiry = expiresOn - currentTimeStamp;
+            renewTokenAfterMs = msToExpiry - (5 * minutems);
+            renewTokenAfterMs = renewTokenAfterMs > 0 ? renewTokenAfterMs : 0;
+        }
+
         setTimeout(() => {
             this.acquireTokenPopup(true);
         }, renewTokenAfterMs);
     }
 
-    onToken(tokenResponse: any, isRenewal: boolean){
+    onToken(tokenResponse: any, isRenewal: boolean) {
+        clientStorage.setItemSync('tokenResponse', JSON.stringify(tokenResponse));
         this.setBearerToken(tokenResponse.accessToken);
         this.setUserDetails(userService.userDetails);
 
-        if(!isRenewal){
+        if (!isRenewal) {
             history.push(routerService.getRouteUrl('notebooks'));
         }
     }
@@ -85,13 +97,13 @@ class MicrosoftOneNoteApi {
     acquireTokenPopup(isRenewal = false) {
         //Always start with acquireTokenSilent to obtain a token in the signed in user from cache
         this.myMSALObj.acquireTokenSilent(this.requestObj).then((tokenResponse: any) => {
-            this.checkTokenExpiryAndRenew(tokenResponse.expiresOn);
             this.onToken(tokenResponse, isRenewal);
+            this.checkTokenExpiryAndRenew();
         }).catch((error: any) => {
             alert(error);
             this.myMSALObj.acquireTokenPopup(this.requestObj).then((tokenResponse: any) => {
-                this.checkTokenExpiryAndRenew(tokenResponse.expiresOn);
-                this.onToken(tokenResponse, isRenewal)
+                this.onToken(tokenResponse, isRenewal);
+                this.checkTokenExpiryAndRenew();
             }).catch((error: any) => {
                 alert(error);
             });
@@ -104,7 +116,7 @@ class MicrosoftOneNoteApi {
 
     onSignIn() {
         this.myMSALObj.handleRedirectCallback(this.authRedirectCallBack);
-        
+
         return this.myMSALObj.loginPopup(this.requestObj).then((loginResponse: any) => {
             this.acquireTokenPopup();
         }).catch((error: any) => {
@@ -137,7 +149,7 @@ class MicrosoftOneNoteApi {
         return axios.get(utilsService.replaceParamsInUrl(apiEndPoints.sections, { id: notebookId })).then(this.returnValue).catch(errorHandlerService.handleError);
     }
 
-    getAllPages(){
+    getAllPages() {
         return axios.get(apiEndPoints.pages).then((response: any) => {
             return response.value.filter((page: any) => page.id !== dbPageId && page.parentSection.displayName !== "Work");
         }).catch(errorHandlerService.handleError);
@@ -155,65 +167,65 @@ class MicrosoftOneNoteApi {
     }
 
     updateOneNoteDB(sessionDetails: any) {
-        const rowProperties = ['startDate', 
-                               'startTime', 
-                               'title', 
-                               'minutesSpentLearning', 
-                               'totalSessionMinutes', 
-                               'repetition',
-                               'pageId',
-                               'sectionName',
-                               'sectionId'];
+        const rowProperties = ['startDate',
+            'startTime',
+            'title',
+            'minutesSpentLearning',
+            'totalSessionMinutes',
+            'repetition',
+            'pageId',
+            'sectionName',
+            'sectionId'];
 
         let content = '';
 
         rowProperties.forEach((rowProp, index) => {
-            content += `${sessionDetails[rowProp]}${index !== (rowProperties.length - 1)? this._dbCellDelimiter: ''}`
+            content += `${sessionDetails[rowProp]}${index !== (rowProperties.length - 1) ? this._dbCellDelimiter : ''}`
         });
 
         return axios.patch(apiEndPoints.content,
             [
                 {
-                    'target':'body',
-                    'action':'append',
+                    'target': 'body',
+                    'action': 'append',
                     'content': `<p>${content}</p>`
-                  }
-             ]
+                }
+            ]
         ).then(data => this._db = null).catch(errorHandlerService.handleError);
     }
 
-    getAllDBRows(){
+    getAllDBRows() {
         return new Promise((resolve, reject) => {
             this.getDb().then((db: string) => {
                 var doc = new DOMParser().parseFromString(db, "text/xml");
                 const ps = Array.from(doc.getElementsByTagName('p'));
                 const _rows: any[] = [];
                 ps.forEach(p => {
-                  const content = p?.textContent?.split(this._dbCellDelimiter) || [];
-                  _rows.push({
-                    startDate: content ? content[0] : '',
-                    startTime: content ? content[1] : '',
-                    title: content ? content[2].trim() : '',
-                    minutesSpentLearning: content ? Number(content[3]) : '',
-                    totalSessionMinutes: content ? content[4] : '',
-                    repetition: content ? (content[5].trim() === 'false'? 'No': 'Yes') : '',
-                    pageId: content ? content[6] : '',
-                    sectionName: content ? content[7] : '',
-                    sectionId: content ? content[8] : ''
-                  });
+                    const content = p?.textContent?.split(this._dbCellDelimiter) || [];
+                    _rows.push({
+                        startDate: content ? content[0] : '',
+                        startTime: content ? content[1] : '',
+                        title: content ? content[2].trim() : '',
+                        minutesSpentLearning: content ? Number(content[3]) : '',
+                        totalSessionMinutes: content ? content[4] : '',
+                        repetition: content ? (content[5].trim() === 'false' ? 'No' : 'Yes') : '',
+                        pageId: content ? content[6] : '',
+                        sectionName: content ? content[7] : '',
+                        sectionId: content ? content[8] : ''
+                    });
                 });
                 resolve(_rows);
-              }).catch(reject);
+            }).catch(reject);
         });
     }
 
-    getDb(){
-        if(this._db){
+    getDb() {
+        if (this._db) {
             return Promise.resolve(this._db);
-        }else{
+        } else {
             return axios.get(apiEndPoints.content).then(db => {
                 return this._db = db;
-             }).catch(errorHandlerService.handleError);
+            }).catch(errorHandlerService.handleError);
         }
     }
 

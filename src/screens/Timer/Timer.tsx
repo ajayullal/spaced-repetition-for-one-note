@@ -22,12 +22,12 @@ const useStyles = makeStyles({
 export default (props: any) => {
   let [sliderValue, setSliderValue] = useState(30);
   let [isTicking, setTicking] = useState(false);
-  let [timeLeft, setTimeLeft] = useState();
+  let [timeLeft, setTimeLeft] = useState('');
   let [timeLeftPercent, setTimeLeftPercent] = useState(0);
   let [openQuitDialog, setQuitDialog] = useState(false);
   let [rows, setRows]: [any[], any] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [totalMinutes, setTotalMinutes] = useState();
+  const [totalMinutes, setTotalMinutes] = useState(0);
   const [revisionMode, setRevisionMode] = useState(false);
   const [timeElapsedTxt, setTimeElapsedTxt] = useState('');
 

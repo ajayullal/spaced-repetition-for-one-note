@@ -3,30 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "^4.8.3",
+    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.40",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
+    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/jest": "^24.9.0",
-    "@types/node": "^12.12.24",
-    "@types/react": "^16.9.17",
-    "@types/react-dom": "^16.9.4",
-    "@types/react-router-dom": "^5.1.3",
+    "@types/node": "^12.12.47",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-router-dom": "^5.1.5",
     "axios": "^0.19.1",
     "d3-selection": "^1.4.1",
-    "localforage": "^1.7.3",
-    "msal": "^1.2.1",
-    "node-sass": "^4.13.1",
+    "localforage": "^1.7.4",
+    "msal": "^1.3.2",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
+    "react": "^16.13.1",
     "react-app-polyfill": "^1.0.5",
-    "react-dom": "^16.12.0",
-    "react-router-dom": "^5.1.2",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.3.0",
     "rimraf": "^3.0.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.9.6"
   },
   "scripts": {
     "start": "concurrently 'react-scripts start'",
@@ -51,6 +51,6 @@
   },
   "devDependencies": {
     "@types/d3-selection": "^1.4.1",
-    "concurrently": "^5.0.2"
+    "concurrently": "^5.2.0"
   }
 }
