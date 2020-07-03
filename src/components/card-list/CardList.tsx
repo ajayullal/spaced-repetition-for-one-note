@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Card, CardContent, Typography, makeStyles } from '@material-ui/core';
-
+import Nothing from '../Nothing/Nothing';
 
 const useStyles = makeStyles({
     card: {
@@ -41,6 +41,6 @@ export default ({items, onClick, displayPropName, render = null, keyProp}: any) 
                 })
             }
         </Grid>):
-        <Typography variant="h6" component="h6" color="textSecondary" gutterBottom>Nothing to display</Typography>
+        <Nothing></Nothing>
     );
 }

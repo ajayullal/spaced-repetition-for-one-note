@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Nothing from '../../components/Nothing/Nothing';
 
 const useStyles = makeStyles({
   table: {
@@ -213,7 +214,7 @@ export default (props: any) => {
             </TableBody>
           </Table>
         </TableContainer>
-      ) : <Typography variant="h6" component="h6" color="textSecondary" gutterBottom>Nothing to display</Typography>
+      ) : <Nothing></Nothing>
   );
 
   const toggleRevisionMode = (name: any) => (event: any) => {
