@@ -53,7 +53,7 @@ export default (props: any) => {
         if (pageDetails?.current.title === row.title) {
           _totalMinutes += row.minutesSpentLearning;
 
-          if(row.repetition === "Yes"){
+          if(row.repetition){
             _totalRevisionTime += row.minutesSpentLearning;
           }else{
             _totalStudyTime += row.minutesSpentLearning;
@@ -79,13 +79,17 @@ export default (props: any) => {
 
     if (pageUrl) {
       mons.getPage(pageUrl).then((_pageDetails: any) => {
+        const noteBook = decodeURI(_pageDetails.links.oneNoteClientUrl.href.split('Documents/')[1].split('/')[0]);
+        _pageDetails.noteBook = noteBook;
+        _pageDetails.isCustomTask = false;
         pageDetails.current = _pageDetails;
         return getAllDBRows();
       });
     }else if(pageTitle){
       pageDetails.current = {
         title: pageTitle,
-        id: 0
+        id: 0,
+        isCustomTask: true
       };
       
       getAllDBRows();
@@ -154,7 +158,9 @@ export default (props: any) => {
       repetition: false,
       pageId: pageDetails.current.id,
       sectionName: pageDetails.current.parentSection?.displayName || params.get('sectionName'),
-      sectionId: pageDetails.current.parentSection?.id || params.get('sectionId')
+      sectionId: pageDetails.current.parentSection?.id || params.get('sectionId'),
+      noteBook: pageDetails.current.noteBook || params.get('noteBook'),
+      isCustomTask: pageDetails.current.isCustomTask
     };
   };
 
@@ -165,7 +171,7 @@ export default (props: any) => {
 
     // Update one note page which tracks learning
     mons.updateOneNoteDB(rowDetails).then(() => {
-      setRows((rows: any) => [...rows, { ...rowDetails, repetition: 'No' }]);
+      setRows((rows: any) => [...rows, { ...rowDetails, repetition: false }]);
     });
 
     clearInterval(counterIntervalRef.current);
@@ -221,7 +227,7 @@ export default (props: any) => {
                   <TableCell align="center">{row.startTime}</TableCell>
                   <TableCell align="center">{utilsService.round(row.minutesSpentLearning)}</TableCell>
                   <TableCell align="center">{utilsService.round(row.totalSessionMinutes)}</TableCell>
-                  <TableCell align="center">{row.repetition}</TableCell>
+                  <TableCell align="center">{row.repetition? 'Yes': 'No'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -272,7 +278,7 @@ export default (props: any) => {
 
       // Update one note page which tracks learning
       mons.updateOneNoteDB(rowDetails).then(() => {
-        setRows((rows: any) => [...rows, { ...rowDetails, repetition: 'Yes' }]);
+        setRows((rows: any) => [...rows, { ...rowDetails, repetition: true }]);
       });
     }
   };

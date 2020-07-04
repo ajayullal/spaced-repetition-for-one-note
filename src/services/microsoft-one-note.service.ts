@@ -95,12 +95,12 @@ class MicrosoftOneNoteApi {
             this.onToken(tokenResponse, isRenewal);
             this.checkTokenExpiryAndRenew();
         }).catch((error: any) => {
-            alert(error);
+            console.error(error);
             this.myMSALObj.acquireTokenPopup(this.requestObj).then((tokenResponse: any) => {
                 this.onToken(tokenResponse, isRenewal);
                 this.checkTokenExpiryAndRenew();
             }).catch((error: any) => {
-                alert(error);
+                console.error(error);
             });
         });
     }
@@ -162,21 +162,7 @@ class MicrosoftOneNoteApi {
     }
 
     updateOneNoteDB(sessionDetails: any) {
-        const rowProperties = ['startDate',
-            'startTime',
-            'title',
-            'minutesSpentLearning',
-            'totalSessionMinutes',
-            'repetition',
-            'pageId',
-            'sectionName',
-            'sectionId'];
-
-        let content = '';
-
-        rowProperties.forEach((rowProp, index) => {
-            content += `${sessionDetails[rowProp]}${index !== (rowProperties.length - 1) ? this._dbCellDelimiter : ''}`
-        });
+        let content = JSON.stringify(sessionDetails);
 
         return axios.patch(apiEndPoints.content,
             [
@@ -196,19 +182,10 @@ class MicrosoftOneNoteApi {
                 const ps = Array.from(doc.getElementsByTagName('p'));
                 const _rows: any[] = [];
                 ps.forEach(p => {
-                    const content = p?.textContent?.split(this._dbCellDelimiter) || [];
-                    _rows.push({
-                        startDate: content ? content[0] : '',
-                        startTime: content ? content[1] : '',
-                        title: content ? content[2].trim() : '',
-                        minutesSpentLearning: content ? Number(content[3]) : '',
-                        totalSessionMinutes: content ? content[4] : '',
-                        repetition: content ? (content[5].trim() === 'false' ? 'No' : 'Yes') : '',
-                        pageId: content ? content[6] : '',
-                        sectionName: content ? content[7] : '',
-                        sectionId: content ? content[8] : ''
-                    });
+                    const content = p?.textContent?.split(this._dbCellDelimiter)[0] || ''
+                    _rows.push(JSON.parse(content));
                 });
+                console.log(JSON.stringify(_rows))
                 resolve(_rows);
             }).catch(reject);
         });

@@ -11,11 +11,11 @@ import { routerService } from '../../../services';
 
 const TaskNameInput = ({ notebooks }: any) => {
     const taskNameContext: any = useContext(TaskNameContext);
-    const {loadingSections, taskName, selectedSection} = taskNameContext;
+    const {loadingSections, taskName, selectedSection, selectedNotebook} = taskNameContext;
     const timerUrl = routerService.getRouteUrl('timer');
 
     const viewPageInfo = () => {
-        let search = `?pageTitle=${encodeURIComponent(taskName)}&sectionId=${selectedSection.id}&sectionName=${selectedSection.displayName}`;
+        let search = `?pageTitle=${encodeURIComponent(taskName)}&sectionId=${selectedSection.id}&sectionName=${selectedSection.displayName}&noteBook=${selectedNotebook.displayName}`;
         routerService.gotoUrl(`${timerUrl}${search}`);
     }
 
