@@ -45,7 +45,7 @@ export default (props: any) => {
       let _totalMinutes = 0;
       const _rows: any = [];
 
-      rows.forEach(row => {
+      rows.reverse().forEach(row => {
         if (pageDetails?.current.title === row.title) {
           _totalMinutes += row.minutesSpentLearning;
           _rows.push(row);
@@ -369,7 +369,7 @@ export default (props: any) => {
 
         <div className="table-cntr">
           <Typography variant="h5" component="h6" gutterBottom>
-            Learning history{totalMinutes ? `: ${Math.ceil(totalMinutes)} minutes spent learning` : null}
+            Learning history{totalMinutes ? `: ${Math.ceil(totalMinutes)} minutes spent learning (${utilsService.round(Math.ceil(totalMinutes)/60)} hours)` : null}
           </Typography>
           {
             loading ? <LinearProgress color="secondary" /> : studyHistory
