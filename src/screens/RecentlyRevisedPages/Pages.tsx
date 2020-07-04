@@ -57,9 +57,8 @@ export default withAuth((props: any) => {
                     setFilteredPages(_filteredPages);
                 }}
             />
-            
 
-            <PageList viewPageInfo={viewPageInfo} keyProp='pageId' filteredPages={filteredPages}></PageList>
+            <PageList viewPageInfo={viewPageInfo} keyProp='title' filteredPages={filteredPages}></PageList>
         </>
     );
 
