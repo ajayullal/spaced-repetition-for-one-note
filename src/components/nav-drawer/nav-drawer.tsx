@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React from 'react';
 import { Drawer, Divider, Hidden, Typography } from '@material-ui/core';
 import { createStyles, Theme, makeStyles, useTheme } from '@material-ui/core/styles';
 import { themeConfig } from '../../services/config';
@@ -24,27 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export default ({ open, onClose, children }: INavDrawer) => {
     const classes = useStyles();
     const theme = useTheme();
-    const drawerRef: any = useRef(null);
-
-    useEffect(() => {
-        const menu = drawerRef.current?.parentElement;
-        const screenEventHandler = (event: any) => {
-            if(event.target.classList.value !== menu.classList.value){
-                onClose();
-            }
-        };
-
-        if(menu){
-            document.body.addEventListener('click', screenEventHandler);
-        }
-
-        return () => {
-            document.body.removeEventListener('click', screenEventHandler);
-        };
-    }, [onClose, open]);
 
     const drawer = (
-        <div ref={drawerRef}>
+        <div>
             <div className="logo-container">
                 <img src={logo} width="40" height="40" />
                 <Typography className="app-name" variant="h6">
