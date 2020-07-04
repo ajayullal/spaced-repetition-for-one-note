@@ -185,7 +185,6 @@ class MicrosoftOneNoteApi {
                     const content = p?.textContent?.split(this._dbCellDelimiter)[0] || ''
                     _rows.push(JSON.parse(content));
                 });
-                console.log(JSON.stringify(_rows))
                 resolve(_rows);
             }).catch(reject);
         });

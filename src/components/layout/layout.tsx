@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles, Theme, createStyles, Typography, Link, IconButton } from '@material-ui/core';
 import Header from '../header/Header';
@@ -57,7 +57,7 @@ export default withRouter(function Layout({ errorMessage, routeInfo, children, h
 
       <Header toggleNavDrawer={() => { setNavOpen(navOpen => !navOpen) }} history={history} hideNavDrawer={hideNavDrawer} pageName={routeInfo.name} />
 
-      <NavDrawer open={navOpen} onClose={() => setNavOpen(false)}>
+      <NavDrawer open={navOpen} onClose={useCallback(() => setNavOpen(false), [])}>
         <List>
           <ListItem onClick={() => {
             const notebooks = routeService.getRouteInfo('notebooks');
