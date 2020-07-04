@@ -39,7 +39,7 @@ const TaskNameInput = ({ notebooks }: any) => {
                 label="Task Name"
                 variant="outlined"
                 onChange={(event: any) => {
-                    const searchTxt = event.target.value;
+                    const searchTxt = event.target.value.trim();
                     taskNameContext.dispatch({type: actions.UPDATE_TASK_NAME, taskName: searchTxt});
                 }}
             />

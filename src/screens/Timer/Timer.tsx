@@ -29,6 +29,8 @@ export default (props: any) => {
   let [rows, setRows]: [any[], any] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalMinutes, setTotalMinutes] = useState(0);
+  const [totalStudyTime, setTotalStudyTime] = useState(0);
+  const [totalRevisionTime, setTotalRevisionTime] = useState(0);
   const [revisionMode, setRevisionMode] = useState(false);
   const [timeElapsedTxt, setTimeElapsedTxt] = useState('');
 
@@ -43,16 +45,27 @@ export default (props: any) => {
   const getAllDBRows = () => {
     return mons.getAllDBRows().then((rows: any[]) => {
       let _totalMinutes = 0;
+      let _totalStudyTime = 0;
+      let _totalRevisionTime = 0;
       const _rows: any = [];
 
       rows.reverse().forEach(row => {
         if (pageDetails?.current.title === row.title) {
           _totalMinutes += row.minutesSpentLearning;
+
+          if(row.repetition === "Yes"){
+            _totalRevisionTime += row.minutesSpentLearning;
+          }else{
+            _totalStudyTime += row.minutesSpentLearning;
+          }
+
           _rows.push(row);
         }
       });
 
       setTotalMinutes(_totalMinutes);
+      setTotalStudyTime(_totalStudyTime);
+      setTotalRevisionTime(_totalRevisionTime);
       setRows(_rows);
     }).finally(() => {
       setLoading(false);
@@ -369,7 +382,7 @@ export default (props: any) => {
 
         <div className="table-cntr">
           <Typography variant="h5" component="h6" gutterBottom>
-            Learning history{totalMinutes ? `: ${Math.ceil(totalMinutes)} minutes spent learning (${utilsService.round(Math.ceil(totalMinutes)/60)} hours)` : null}
+            Learning history{totalMinutes ? `: ${Math.ceil(totalMinutes)} minutes spent learning (${utilsService.round(Math.ceil(totalStudyTime)/60)} - Study, ${utilsService.round(Math.ceil(totalRevisionTime)/60)} - Revision, ${utilsService.round(Math.ceil(totalMinutes)/60)} total hours)` : null}
           </Typography>
           {
             loading ? <LinearProgress color="secondary" /> : studyHistory
