@@ -50,7 +50,6 @@ export default (props: any) => {
       const _rows: any = [];
   
       rows.reverse().forEach(row => {
-        console.log(row)
         if (pageDetails?.current.title === row.title) {
           _totalMinutes += row.minutesSpentLearning;
 
