@@ -48,7 +48,7 @@ export default (props: any) => {
       let _totalStudyTime = 0;
       let _totalRevisionTime = 0;
       const _rows: any = [];
-      console.log(rows)
+  
       rows.reverse().forEach(row => {
         console.log(row)
         if (pageDetails?.current.title === row.title) {
