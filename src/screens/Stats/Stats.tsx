@@ -49,7 +49,7 @@ const TableComponent = () => {
                                     row.pages.map((page: any, index: number) => {
                                         return (
                                             <p onClick={() => viewPageInfo(page.sessions[0])} key={index}>
-                                                {page.title} ({page.stats.totalSessionMinutes}, {page.stats.totalSessionHours})
+                                                {page.title} ({page.stats.minutesSpentLearning}, {page.stats.hoursSpentLearning})
                                             </p>
                                         )
                                     })

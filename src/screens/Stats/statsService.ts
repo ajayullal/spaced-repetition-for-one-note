@@ -9,24 +9,27 @@ class StatsService {
         db.forEach((row: any) => {
             const startDate = this.formatDate(row.startDate);
             dbDateMap[startDate] = dbDateMap[startDate] || { totalTimeSpent: 0, date: startDate, pages: {} };
-            row.totalSessionMinutes = utilsService.round(row.totalSessionMinutes);
-            row.totalSessionHours = utilsService.round(row.totalSessionMinutes / 60);
-            dbDateMap[startDate].totalTimeSpent += row.totalSessionMinutes;
+            row.minutesSpentLearning = utilsService.round(row.minutesSpentLearning);
+            row.hoursSpentLearning = utilsService.round(row.minutesSpentLearning / 60);
+            dbDateMap[startDate].totalTimeSpent += row.minutesSpentLearning;
             dbDateMap[startDate].totalTimeSpentHours = utilsService.round(dbDateMap[startDate].totalTimeSpent / 60);
-            dbDateMap[startDate].pages[row.title] = dbDateMap[startDate].pages[row.title] || { stats: { totalSessionHours: 0, totalSessionMinutes: 0 }, sessions: [] };
-            dbDateMap[startDate].pages[row.title].stats.totalSessionHours += row.totalSessionHours;
-            dbDateMap[startDate].pages[row.title].stats.totalSessionMinutes += row.totalSessionMinutes;
+            dbDateMap[startDate].pages[row.title] = dbDateMap[startDate].pages[row.title] || { stats: { minutesSpentLearning: 0, hoursSpentLearning: 0 }, sessions: [] };
+            dbDateMap[startDate].pages[row.title].stats.minutesSpentLearning += row.minutesSpentLearning;
+            dbDateMap[startDate].pages[row.title].stats.hoursSpentLearning += row.hoursSpentLearning;
             dbDateMap[startDate].pages[row.title].sessions.push(row);
         });
 
+        console.log(dbDateMap)
+
         let rows = Object.keys(dbDateMap).map(date => dbDateMap[date]);
         rows.forEach(row => {
+            row.totalTimeSpent = utilsService.round(row.totalTimeSpent);
             let pages = row.pages;
             row.pages = [];
             Object.keys(pages).forEach(title => {
                 pages[title].title = title;
-                pages[title].stats.totalSessionHours = utilsService.round(pages[title].stats.totalSessionHours);
-                pages[title].stats.totalSessionMinutes = utilsService.round(pages[title].stats.totalSessionMinutes);
+                pages[title].stats.minutesSpentLearning = utilsService.round(pages[title].stats.minutesSpentLearning);
+                pages[title].stats.hoursSpentLearning = utilsService.round(pages[title].stats.hoursSpentLearning);
                 row.pages.push(pages[title])
             });
         });
