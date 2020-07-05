@@ -90,7 +90,7 @@ class RouteService{
         if(info.self){
             this.gotoUrl(`${timerUrl}?pageUrl=${encodeURIComponent(info.self)}`);
         }else if(info.sectionId && info.sectionName && info.title){
-            let search = `?pageTitle=${encodeURIComponent(info.title)}&sectionId=${info.sectionId}&sectionName=${info.sectionName}`;
+            let search = `?pageTitle=${encodeURIComponent(info.title)}&sectionId=${info.sectionId}&sectionName=${info.sectionName}&noteBook=${info.noteBook}`;
             this.gotoUrl(`${timerUrl}${search}`);
         }
     }

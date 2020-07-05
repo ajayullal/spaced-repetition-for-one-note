@@ -7,6 +7,7 @@ import { TableContainer, Table, makeStyles, TableHead, TableRow, TableCell, Tabl
 import Paper from '@material-ui/core/Paper';
 import Charts from './Charts';
 import Nothing from '../../components/Nothing/Nothing';
+import './_stats.module.scss';
 
 const TableComponent = () => {
     const useStyles = makeStyles({
@@ -21,6 +22,11 @@ const TableComponent = () => {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(0);
 
+
+    const viewPageInfo = (page: any) => {
+        routerService.viewPageInfo(page);
+    };
+
     return (
         <>
             <Typography variant="h5" component="h5" gutterBottom>Total time: {stats.totalTime} hours, Average time: {stats.averageTime} hours per day</Typography>
@@ -31,7 +37,7 @@ const TableComponent = () => {
                         <TableRow>
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Time Spent (Minutes, Hours)</TableCell>
-                            <TableCell align="center">Pages</TableCell>
+                            <TableCell align="center">Pages (Minutes, Hours)</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -42,8 +48,8 @@ const TableComponent = () => {
                                 <TableCell align="center">{
                                     row.pages.map((page: any, index: number) => {
                                         return (
-                                            <p key={index}>
-                                                {page.title} ({page.totalSessionMinutes}, {page.totalSessionHours})
+                                            <p onClick={() => viewPageInfo(page.sessions[0])} key={index}>
+                                                {page.title} ({page.stats.totalSessionMinutes}, {page.stats.totalSessionHours})
                                             </p>
                                         )
                                     })
@@ -78,8 +84,7 @@ const StatsComponent = () => {
 
     return (
         <>
-            {rows.length > 0? Component: <Nothing></Nothing>}
-            
+            {rows?.length > 0? Component: <Nothing></Nothing>} 
         </>
     );
 };

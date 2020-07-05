@@ -182,8 +182,10 @@ class MicrosoftOneNoteApi {
                 const ps = Array.from(doc.getElementsByTagName('p'));
                 const _rows: any[] = [];
                 ps.forEach(p => {
-                    const content = p?.textContent?.split(this._dbCellDelimiter)[0] || ''
-                    _rows.push(JSON.parse(content));
+                    let content: any = p?.textContent?.split(this._dbCellDelimiter)[0];
+                    content = JSON.parse(content);
+                    // content.totalSessionMinutes = utilsService.round(Number(content.totalSessionMinutes));
+                    _rows.push(content);
                 });
                 resolve(_rows);
             }).catch(reject);

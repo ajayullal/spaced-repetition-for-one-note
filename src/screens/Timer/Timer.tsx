@@ -171,7 +171,7 @@ export default (props: any) => {
 
     // Update one note page which tracks learning
     mons.updateOneNoteDB(rowDetails).then(() => {
-      setRows((rows: any) => [...rows, { ...rowDetails, repetition: false }]);
+      setRows((rows: any) => [{ ...rowDetails, repetition: false }, ...rows]);
     });
 
     clearInterval(counterIntervalRef.current);
