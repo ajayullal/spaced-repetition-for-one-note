@@ -19,8 +19,6 @@ class StatsService {
             dbDateMap[startDate].pages[row.title].sessions.push(row);
         });
 
-        console.log(dbDateMap)
-
         let rows = Object.keys(dbDateMap).map(date => dbDateMap[date]);
         rows.forEach(row => {
             row.totalTimeSpent = utilsService.round(row.totalTimeSpent);
