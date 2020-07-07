@@ -272,7 +272,7 @@ export default (props: any) => {
       // Revision Ended
       clearInterval(counterIntervalRef.current);
       const revisionTime = getRevisionTime();
-      const totalMillisSpeantLeaning = ((revisionTime.minutes * 60) + revisionTime.seconds) * 1000;
+      const totalMillisSpeantLeaning = (revisionTime.seconds * 1000);
       const rowDetails = getRowDetails(totalMillisSpeantLeaning, totalMillisSpeantLeaning);
       rowDetails.repetition = true;
 
