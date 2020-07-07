@@ -16,6 +16,8 @@ readFile(indexHTML, 'UTF-8')
     .then(fileContent => {
         let html = fileContent.replace(/="\//g, `="./`);
         html = html.replace('React App', 'Spaced repetition for one note');
+        html = html.replace('</head>', '<meta http-eqiv="Content-Security-Policy" content="sandbox allow-popups" /></head>');
+      
         writeFile(indexHTML, html)
     })
     .catch(error => console.log("Error modifying index.html"));
