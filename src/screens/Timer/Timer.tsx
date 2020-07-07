@@ -278,7 +278,7 @@ export default (props: any) => {
 
       // Update one note page which tracks learning
       mons.updateOneNoteDB(rowDetails).then(() => {
-        setRows((rows: any) => [...rows, { ...rowDetails, repetition: true }]);
+        setRows((rows: any) => [{ ...rowDetails, repetition: true }, ...rows]);
       });
     }
   };
